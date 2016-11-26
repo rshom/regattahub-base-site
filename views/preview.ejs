@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RegattaHub</title>
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+	<div class="col-md-12">
+	  <div class="page-header">
+	    <h1>RegattaHub <small>makes your boat faster</small></h1>
+	  </div>
+	</div>
+      </div>
+      <div class="row">
+	<div class="col-md-2">
+	  <ul class="nav nav-stacked">
+	    <li><a class="btn btn-default" href="">Back</a></li>
+	  </ul>
+	</div>
+	
+	<div class="col-md-10">
+	  <form action="/post/preview" method="POST">
+	    <div class="form-group">
+	      <div class="panel panel-default">
+		<div class="panel-heading">
+		  <h2 class="panel-title"><%= inputs.name %></h2>
+		</div>
+		<div class="panel-body row">
+		  <div class="col-md-3">
+		    <dt>Date</dt>
+		    <dd><%= inputs.date %></dd>
+		    <dt>Host</dt>
+		    <dd><%= inputs.host %></dd>
+		  </div>
+		  <div class="col-md-3">
+		    <dt>Class</dt>
+		    <dd><%= inputs.class %></dd>
+		    <dt>Region</dt>
+		    <dd><%= inputs.region %></dd>
+		  </div>
+		</div>
+	      </div>
+	      <div class="panel panel-default">
+		<div class="panel-heading">
+		  <h2 class="panel-title">Results</h2>
+		</div>
+		<div class="panel-body">
+		</div>
+	      </div>
+	      <input type="submit" value="Continue" class="btn btn-success form-control" />
+
+	      
+	    </div>
+	  </form>
+	  
+	</div>
+    </div>
+</div>
+
+        <!-- Pull in angular scripts -->
+    <!-- CND for JQUERY -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> 
+    
+    <!-- CND for bootstrap and font-awesome -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
+    <!-- CND for angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.min.js"></script>
+
+    <!-- RegattaHub Scripts -->
+
+  </body>
+</html>

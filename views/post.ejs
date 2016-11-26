@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RegattaHub</title>
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+	<div class="col-md-12">
+	  <div class="page-header">
+	    <h1>RegattaHub <small>Sail Fast</small></h1>
+	  </div>
+	</div>
+      </div>
+      <div class="row">
+	<div class="col-md-2">
+	  <ul class="nav nav-stacked">
+	    <li><a class="btn btn-default" href="/post/<%= region %>/<%= boat_class %>">Back to results</a></li>
+	  </ul>
+	</div>
+	
+	<div class="col-md-10">
+
+	  <div class="row">
+	    <div class="col-md-12">
+	      
+	      <form>
+	      <div class="panel panel-primary">
+		<div class="panel-heading">
+		  <h2 class="panel-title">Regatta Information</h2>
+		</div>
+		<div class="panel-body row">
+		  <div class="form-group col-md-12">
+		    <label for="name">Regatta Name</label>
+		    <input type="text" name="name" placeholder="1875 Regatta" class="form-control" required />
+		  </div>
+		  <div class="form-group col-md-6">
+		    <label for="host">Host Club</label>
+		    <input type="text" name="host" placeholder="Perth Yacht Club" class="form-control" required />
+		  </div>
+
+		  <div class="form-group col-md-6">
+		    <label for="date">Date</label>
+		    <input type="datetime" name="date" class="form-control" placeholder="1875-04-17" required />
+		  </div>
+
+		  <div class="form-group col-md-6">
+		    <label for="region">Region</label>
+		    <select class="form-control">
+		      <option class="form-control">{{Region}}</option>
+		    </select>
+		  </div>
+		  <div class="form-group col-md-6">
+		    <label for="region">Boat Class</label>
+		    <select class="form-control">
+		      <option class="form-control">{{Class}}</option>
+		    </select>
+		  </div>
+		  
+		</div>
+	      </div>
+	      <div class="panel panel-primary">
+		<div class="panel-heading">
+		  <h2 class="panel-title">Sailing Rules</h2>
+		</div>
+		<div class="panel-body row">
+		  <div class="form-group col-md-6">
+		    <label for="name">Disqualification Penalty</label>
+		    
+		    <input type="number" name="dsq" value="2" class="form-control"/>
+		    <span class="help-block">DSQs will be scores as fleet+{{ dsq }}</span>
+		    <div class="checkbox">
+		      <label>
+			<input type="checkbox" name="dsq_throwouts" /> DSQs can be thrown out.
+		      </label>
+		    </div>
+		    
+		  </div>
+		  <div class="form-group col-md-6">
+		    <label for="dnf">Did Not Finish Penalty</label>
+		    <input type="number" name="dnf" value="1" class="form-control"/>
+		    <span class="help-block">DNFs will be scores as fleet+{{ dnf }}</span>
+		    <div class="checkbox">
+		      <label>
+			<input type="checkbox" name="dsq_throwouts" checked /> DNFs can be thrown out.
+		      </label>
+		    </div>
+
+		  </div>
+
+		  <div class="form-group col-md-6">
+		    <label for="firstthrowout">Races required for first throwout</label>
+		    <input type="number" name="throwouts" value="6" class="form-control" />
+		  </div>
+		  
+		</div>
+	      </div>
+	    </div>
+	  </div>
+	
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h2 class="panel-title">Results</h2>
+	  </div>
+	  <div class="panel-body row">
+	      <div class="col-md-6">
+		<input type="file" name="fileUpload" required />
+		<span class="help-block">Upload a CSV of results matching the format below.<br />
+		  All sail #'s must be unique.<br />
+		<a>Click here</a> for help.</span>
+		<p><button class="btn btn-primary">Upload</button></p>
+	      </div>
+	      <div class="col-md-6">
+		<p class="lead alert alert-info">Or record results live <a>here</a></p>
+	      </div>
+
+	      <div class="col-md-12">
+		<table class="table table-condensed">
+		  <thead>
+		    <tr>
+		      <th>Skipper</th>
+		      <th>Club</th>
+		      <th>Sail #</th>
+		  <th>Race 1</th>
+		      <th>Race 2</th>
+		      <th>Race 3</th>
+		      <th>Race 4</th>
+		      <th>...</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <td>Lord Nelson</td>
+		      <td>RFN</td>
+		      <td>GBR 1234</td>
+		      <td>1</td>
+		      <td>2</td>
+		      <td>DSQ</td>
+		      <td>3</td>
+		      <td>...</td>
+		    </tr>
+		    <tr>
+		      <td>Lord Nelson</td>
+		      <td>RFN</td>
+		      <td>GBR 1234</td>
+		      <td>1</td>
+		      <td>DNF</td>
+		      <td>3</td>
+		      <td>3</td>
+		      <td>...</td>
+		    </tr>
+		    <tr>
+		      <td>Lord Nelson</td>
+		      <td>RFN</td>
+		      <td>GBR 1234</td>
+		      <td>1</td>
+		      <td>2</td>
+		      <td>3</td>
+		      <td>3</td>
+		      <td>...</td>
+		    </tr>
+		    <tr>
+		      <td>Lord Nelson</td>
+		      <td>RFN</td>
+		      <td>GBR 1234</td>
+		      <td>1</td>
+		      <td>2</td>
+		      <td>3</td>
+		      <td>3</td>
+		      <td>...</td>
+		    </tr>
+		    <tr>
+		      <td>...</td>
+		      <td>...</td>
+		      <td>...</td>
+		      <td>...</td>
+		      <td>...</td>
+		      <td>...</td>
+		      <td>...</td>
+		      <td>...</td>
+		    </tr>
+		    
+		  </tbody>
+		</table>
+	      </div>
+	    </div>
+	</div>
+
+		      <div class="panel panel-primary">
+		<div class="panel-heading">
+		  <h2 class="panel-title">Contact Information</h2>
+		</div>
+		<div class="panel-body row">
+		  <div class="form-group col-md-6">
+		    <label for="email">Email Address</label>
+		    <input type="email" name="email" placeholder="jamescollins@catalpa.com" class="form-control" required />
+		    <span class="help-block">We promise to keep your email private. We are going to send you a link to edit your course.</span>
+		  </div>
+		  <input name="gotcha" type="text" style="display:none" />
+		  <!-- only robots fill this out -->
+		</div>
+	      </div>
+	
+	<div class="row">
+	  <div class="col-md-12">
+	    <div class="pull-right">
+	      <input class="btn btn-success btn-lg" type="submit" value="submit"/>
+	  </form>
+	    </div>
+	    
+	  </div>
+	</div>
+	</div>
+      <div class="footer">
+	<p>&copy; 2016 Shomberg Systems
+      </div>
+      </div>
+    <!-- Pull in angular scripts -->
+    <!-- CND for JQUERY -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> 
+    
+    <!-- CND for bootstrap and font-awesome -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
+    <!-- CND for angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.min.js"></script>
+
+    <!-- RegattaHub Scripts -->
+    
+
+
+  </body>
+</html>
