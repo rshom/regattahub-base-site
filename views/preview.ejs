@@ -28,7 +28,7 @@
 	<div class="col-md-10">
 	  <form action="/post/preview" method="POST">
 	    <div class="form-group">
-	      <div class="panel panel-default">
+	      <div class="panel panel-primary">
 		<div class="panel-heading">
 		  <h2 class="panel-title"><%= inputs.name %></h2>
 		</div>
@@ -41,20 +41,45 @@
 		  </div>
 		  <div class="col-md-3">
 		    <dt>Class</dt>
-		    <dd><%= inputs.class %></dd>
+		    <dd><%= inputs.boat_class %></dd>
 		    <dt>Region</dt>
 		    <dd><%= inputs.region %></dd>
 		  </div>
 		</div>
 	      </div>
-	      <div class="panel panel-default">
+	      <div class="panel panel-primary">
 		<div class="panel-heading">
 		  <h2 class="panel-title">Results</h2>
 		</div>
-		<div class="panel-body">
+		<div class="panel-body" ng-app="previewApp" ng-controller="previewCtrl">
+		  <p class="alert alert-info">
+		    Check to make sure the table was read correctly then presss continue. RegattaHub will analyze the results and send you an email with a link to publish the final results.
+		  </p>
+		  <div class="form-group">
+		    <input type="submit" value="Continue" class="btn btn-success" />
+		  </div>
+
+		  <table class="table table-striped">
+		    <thead>
+		      <tr>
+			<th>Skipper</th>
+			<th>Club</th>
+			<th>Sail #</th>
+			<th ng-repeat="col in results[0].slice(3)">R{{$index}}</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+		      <tr ng-repeat="row in results track by $index">
+			<td ng-repeat="data in row track by $index">{{data}}</td>
+		      </tr>
+		    </tbody>
+		  </table>
+		  <div class="form-group">
+		    <input type="submit" value="Continue" class="btn btn-success" />
+		  </div>
+
 		</div>
 	      </div>
-	      <input type="submit" value="Continue" class="btn btn-success form-control" />
 
 	      
 	    </div>
@@ -77,7 +102,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.min.js"></script>
 
-    <!-- RegattaHub Scripts -->
+  <!-- RegattaHub Scripts -->
+  <script>
+    app = angular.module('previewApp', []);
+    app.controller('previewCtrl', function($scope){
+    var inputs =<%- JSON.stringify(inputs); %>;
+    $scope.results = JSON.parse(inputs.results);
+    });
+  </script>
 
   </body>
 </html>

@@ -27,9 +27,8 @@ router.get('/post/:region/:boat_class/', function(req,res,next) {
 });
 
 router.post('/post/preview/', function(req,res,next) {
-
+    
     var inputs=req.body;
-
     res.render('preview',{ inputs: inputs });
 });
 

@@ -30,7 +30,7 @@
 	  <div class="row">
 	    <div class="col-md-12">
 	      
-	      <form>
+	      <form action="/post/preview" method="post">
 	      <div class="panel panel-primary">
 		<div class="panel-heading">
 		  <h2 class="panel-title">Regatta Information</h2>
@@ -51,16 +51,14 @@
 		  </div>
 
 		  <div class="form-group col-md-6">
-		    <label for="region">Region</label>
-		    <select class="form-control">
-		      <option class="form-control">{{Region}}</option>
-		    </select>
+		    <label for="region">Region:</label>
+		    <p class="lead"><%= region %></p>
+		    <input type="hidden" name="region" value="<%= region %>" />
 		  </div>
 		  <div class="form-group col-md-6">
-		    <label for="region">Boat Class</label>
-		    <select class="form-control">
-		      <option class="form-control">{{Class}}</option>
-		    </select>
+		    <label for="boatClass">Boat Class</label>
+		    <p class="lead"><%= boat_class %></p>
+		    <input type="hidden" name="boat_class" value="<%= boat_class %>" />
 		  </div>
 		  
 		</div>
@@ -108,13 +106,13 @@
 	  <div class="panel-heading">
 	    <h2 class="panel-title">Results</h2>
 	  </div>
-	  <div class="panel-body row">
+	  <div class="panel-body row" ng-app="uploadApp" ng-controller="uploadCtrl">
 	      <div class="col-md-6">
-		<input type="file" name="fileUpload" required />
+		<input type="file" name="fileUpload" id="fileUpload" required />
 		<span class="help-block">Upload a CSV of results matching the format below.<br />
 		  All sail #'s must be unique.<br />
 		<a>Click here</a> for help.</span>
-		<p><button class="btn btn-primary">Upload</button></p>
+		<p><a class="btn btn-primary" id="fileUploadBtn">Upload</a></p>
 	      </div>
 	      <div class="col-md-6">
 		<p class="lead alert alert-info">Or record results live <a>here</a></p>
@@ -127,56 +125,50 @@
 		      <th>Skipper</th>
 		      <th>Club</th>
 		      <th>Sail #</th>
-		  <th>Race 1</th>
-		      <th>Race 2</th>
-		      <th>Race 3</th>
-		      <th>Race 4</th>
+		  <th>R1</th>
+		      <th>R2</th>
+		      <th>R3</th>
 		      <th>...</th>
 		    </tr>
 		  </thead>
 		  <tbody>
 		    <tr>
-		      <td>Lord Nelson</td>
-		      <td>RFN</td>
-		      <td>GBR 1234</td>
-		      <td>1</td>
-		      <td>2</td>
-		      <td>DSQ</td>
-		      <td>3</td>
+		      <td>{{results[1][0]}}</td>
+		      <td>{{results[1][1]}}</td>
+		      <td>{{results[1][2]}}</td>
+		      <td>{{results[1][3]}}</td>
+		      <td>{{results[1][4]}}</td>
+		      <td>{{results[1][5]}}</td>
 		      <td>...</td>
 		    </tr>
 		    <tr>
-		      <td>Lord Nelson</td>
-		      <td>RFN</td>
-		      <td>GBR 1234</td>
-		      <td>1</td>
-		      <td>DNF</td>
-		      <td>3</td>
-		      <td>3</td>
+		      <td>{{results[2][0]}}</td>
+		      <td>{{results[2][1]}}</td>
+		      <td>{{results[2][2]}}</td>
+		      <td>{{results[2][3]}}</td>
+		      <td>{{results[2][4]}}</td>
+		      <td>{{results[2][5]}}</td>
 		      <td>...</td>
 		    </tr>
 		    <tr>
-		      <td>Lord Nelson</td>
-		      <td>RFN</td>
-		      <td>GBR 1234</td>
-		      <td>1</td>
-		      <td>2</td>
-		      <td>3</td>
-		      <td>3</td>
+		      <td>{{results[3][0]}}</td>
+		      <td>{{results[3][1]}}</td>
+		      <td>{{results[3][2]}}</td>
+		      <td>{{results[3][3]}}</td>
+		      <td>{{results[3][4]}}</td>
+		      <td>{{results[3][5]}}</td>
 		      <td>...</td>
 		    </tr>
 		    <tr>
-		      <td>Lord Nelson</td>
-		      <td>RFN</td>
-		      <td>GBR 1234</td>
-		      <td>1</td>
-		      <td>2</td>
-		      <td>3</td>
-		      <td>3</td>
+		      <td>{{results[4][0]}}</td>
+		      <td>{{results[4][1]}}</td>
+		      <td>{{results[4][2]}}</td>
+		      <td>{{results[4][3]}}</td>
+		      <td>{{results[4][4]}}</td>
+		      <td>{{results[4][5]}}</td>
 		      <td>...</td>
 		    </tr>
 		    <tr>
-		      <td>...</td>
 		      <td>...</td>
 		      <td>...</td>
 		      <td>...</td>
@@ -188,6 +180,7 @@
 		    
 		  </tbody>
 		</table>
+		<input type="hidden" name="results" value="{{results}}" />
 	      </div>
 	    </div>
 	</div>
@@ -235,8 +228,30 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.min.js"></script>
 
     <!-- RegattaHub Scripts -->
-    
+    <script>
 
+      var app = angular.module('uploadApp', []);
+      app.controller('uploadCtrl', function($scope){
+      
+      $scope.results = [];
+      document.getElementById('fileUploadBtn').onclick=function(event){
+      fr = new FileReader()
+      fr.onload = function(e){
+      $scope.results = [];
+      var results_raw = e.target.result;
+      var lines = results_raw.split('\n');
+      for (ii in lines){
+      var currentline=lines[ii].split(',');
+      $scope.results.push(currentline);
+      }
+      $scope.$apply();
+      }
+
+      fr.readAsText(document.getElementById('fileUpload').files[0]);
+      }
+      });
+
+    </script>
 
   </body>
 </html>
