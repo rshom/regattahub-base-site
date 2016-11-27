@@ -55,7 +55,7 @@
 		    Check to make sure the table was read correctly then presss continue. RegattaHub will analyze the results and send you an email with a link to publish the final results.
 		  </p>
 		  <div class="form-group">
-		    <a href="" ng-click="post()" class="btn btn-success">Continue</a>
+		    <button ng-click="post()" class="btn btn-success">Continue</button>
 
 		  </div>
 
@@ -75,7 +75,7 @@
 		    </tbody>
 		  </table>
 		  <div class="form-group">
-		    <a href="" ng-click="post()" class="btn btn-success">Continue</a>
+		    <button ng-click="post()" class="btn btn-success">Continue</button>
 		  </div>
 
 		</div>
@@ -104,7 +104,7 @@
   <!-- RegattaHub Scripts -->
   <script>
     app = angular.module('previewApp', []);
-app.controller('previewCtrl', function($scope, $http){
+app.controller('previewCtrl', function($scope, $http, $location){
     var inputs =<%- JSON.stringify(inputs); %>;
     $scope.results = JSON.parse(inputs.results);
     
@@ -113,11 +113,16 @@ app.controller('previewCtrl', function($scope, $http){
 	// send inputs as the
 	// this will send an email
 	
-	$http.post('/post/publish', {data: inputs})
-	    .then($http.get('/post/thankyou'),$http.get('/post/error'));
-    }
-
-    });
+	$http.post('/post/publish', {data: inputs}).success(function(data){
+	    if(data.state=="success"){
+		window.location = '/post/thankyou';
+	    } else {
+		window.location = '/post/error';
+		
+	    }
+	})
+    };
+});
   </script>
 
   </body>
