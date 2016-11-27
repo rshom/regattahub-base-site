@@ -1,4 +1,8 @@
 var express = require('express');
+
+var mailAuth = require('../config/mailAuth');
+var nodemailer = require('nodemailer');
+
 var router = express.Router();
 
 /* GET home page. */
@@ -30,6 +34,30 @@ router.post('/post/preview/', function(req,res,next) {
     
     var inputs=req.body;
     res.render('preview',{ inputs: inputs });
+});
+
+router.post('/post/publish', function(req,res,next) {
+    var transporter = nodemailer.createTransport(mailAuth);
+    var data = req.body.data;
+    var text = "hello world from regattahub.com";
+    var mailOptions = {
+	from: mailAuth.auth.user,
+	to: data.email,
+	subject: "RegattaHub automail test",
+	text: text
+    };
+    console.log(mailOptions);
+    transporter.sendMail(mailOptions, function(error,info){
+	if(error){
+	    console.log(error);
+	    res.json({yo: 'error'});
+	} else {
+	    console.log('Message sent :' + info.response);
+	    res.json({yo: info.response});
+	};
+    });
+
+
 });
 
 router.get('/manage/:id/:key/', function(req,res,next) {

@@ -25,8 +25,7 @@
 	  </ul>
 	</div>
 	
-	<div class="col-md-10">
-	  <form action="/post/preview" method="POST">
+	<div class="col-md-10" ng-app="previewApp" ng-controller="previewCtrl">
 	    <div class="form-group">
 	      <div class="panel panel-primary">
 		<div class="panel-heading">
@@ -51,12 +50,13 @@
 		<div class="panel-heading">
 		  <h2 class="panel-title">Results</h2>
 		</div>
-		<div class="panel-body" ng-app="previewApp" ng-controller="previewCtrl">
+		<div class="panel-body">
 		  <p class="alert alert-info">
 		    Check to make sure the table was read correctly then presss continue. RegattaHub will analyze the results and send you an email with a link to publish the final results.
 		  </p>
 		  <div class="form-group">
-		    <input type="submit" value="Continue" class="btn btn-success" />
+		    <a href="" ng-click="post()" class="btn btn-success">Continue</a>
+
 		  </div>
 
 		  <table class="table table-striped">
@@ -70,12 +70,12 @@
 		    </thead>
 		    <tbody>
 		      <tr ng-repeat="row in results track by $index">
-			<td ng-repeat="data in row track by $index">{{data}}</td>
+			<td ng-repeat="thing in row track by $index">{{thing}}</td>
 		      </tr>
 		    </tbody>
 		  </table>
 		  <div class="form-group">
-		    <input type="submit" value="Continue" class="btn btn-success" />
+		    <a href="" ng-click="post()" class="btn btn-success">Continue</a>
 		  </div>
 
 		</div>
@@ -83,7 +83,6 @@
 
 	      
 	    </div>
-	  </form>
 	  
 	</div>
     </div>
@@ -105,9 +104,19 @@
   <!-- RegattaHub Scripts -->
   <script>
     app = angular.module('previewApp', []);
-    app.controller('previewCtrl', function($scope){
+app.controller('previewCtrl', function($scope, $http){
     var inputs =<%- JSON.stringify(inputs); %>;
     $scope.results = JSON.parse(inputs.results);
+    
+    $scope.post = function(){
+	// post to /post/publish
+	// send inputs as the
+	// this will send an email
+	
+	$http.post('/post/publish', {data: inputs})
+	    .then($http.get('/post/thankyou'),$http.get('/post/error'));
+    }
+
     });
   </script>
 
