@@ -31,6 +31,7 @@ router.get('/results/:region/:boat_class/', function(req, res, next) {
     res.render('index', {boat_class: boat_class, region: region});
 });
 
+
 module.exports = router;
 
 

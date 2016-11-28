@@ -1,7 +1,10 @@
 var express = require('express');
-
+var mongoose = require('mongoose');
+var Regatta = mongoose.model('Regatta');
 var mailAuth = require('../config/mailAuth');
 var nodemailer = require('nodemailer');
+var bcrypt = require('bcrypt');
+var randomstring = require('randomstring');
 
 var router = express.Router();
 
@@ -19,10 +22,29 @@ router.post('/preview/', function(req,res,next) {
 });
 
 router.post('/publish',function(req,res) {
-    console.log("hello");
+    // I can definitely modularize this more
+    // set publish to unpublished
+    console.log('publishing')
+    var regatta = new Regatta();
+    console.log(regatta);
+    regatta.name = 'test';
+    regatta.created_by = 'Russ';
+    var passkey = randomstring.generate(7);
+    bcrypt.hash(passkey,10,function(err,hash){
+	regatta.passkey = hash;
+    console.log(regatta);
+
+    // save it to the database
+    regatta.save(function(err){
+	if (err)
+	    console.log('Didnt save: ' + err);
+    });
+    console.log('saved');
+    
+    // send an email with id and key to the user
     var transporter = nodemailer.createTransport(mailAuth);
     var data = req.body.data;
-    var text = "hello world from regattahub.com";
+    var text = regatta._id+" "+passkey;
     var mailOptions = {
 	from: mailAuth.auth.user,
 	to: data.email,
@@ -38,6 +60,7 @@ router.post('/publish',function(req,res) {
 	    res.send({state:"success"});
 	};
     });
+});
 });
 
 router.get('/thankyou', function(req, res){
