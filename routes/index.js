@@ -10,7 +10,8 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    Regatta.find({published: true},function(err,regattas){
+    //Regatta.find({published: true},function(err,regattas){
+    Regatta.find(function(err,regattas){
 	if (err)
 	    console.log(err);
 
