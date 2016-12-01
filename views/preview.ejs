@@ -29,55 +29,73 @@
 	    <div class="form-group">
 	      <div class="panel panel-primary">
 		<div class="panel-heading">
-		  <h2 class="panel-title"><%= inputs.name %></h2>
+		  <h2 class="panel-title"><%= regatta.name %></h2>
 		</div>
-		<div class="panel-body row">
-		  <div class="col-md-3">
-		    <dt>Date</dt>
-		    <dd><%= inputs.date %></dd>
+		<div class="panel-body">
+		  <div class="row">
+		    <div class="col-md-6">
+		      <p>
+			<dt>Date</dt>
+			<dd><%= regatta.date %></dd>
+			<dt>Class</dt>
+			<dd><%= regatta.boat_class %></dd>
+		      </p>
+		  </div>
+		    <div class="col-md-6">
+		      <p>
+			<dt>City</dt>
+			<dd><%= regatta.city %></dd>
 		    <dt>Host</dt>
-		    <dd><%= inputs.host %></dd>
+			<dd><%= regatta.host %></dd>
+		      </p>
+		    </div>
 		  </div>
-		  <div class="col-md-3">
-		    <dt>Class</dt>
-		    <dd><%= inputs.boat_class %></dd>
-		    <dt>Region</dt>
-		    <dd><%= inputs.region %></dd>
+		  <div class="row">
+		    <div class="col-md-12">
+		      <p class="alert alert-info">
+			Check to make sure the table was read correctly then presss continue. RegattaHub will analyze the results and send you an email with a link to publish the final results.
+		      </p>
+		      <form action="/post/publish" method="post">
+			<div class="form-group">
+			  <input type="hidden" value="<%= JSON.stringify(regatta) %>" name="regatta" />
+			  <input type="submit" value="Submit" class="btn btn-primary" />
+			</div>
+		      </form>
+		    </div>
 		  </div>
+		  
 		</div>
 	      </div>
 	      <div class="panel panel-primary">
 		<div class="panel-heading">
-		  <h2 class="panel-title">Results</h2>
+		  <h2 class="panel-title">Preview Results</h2>
 		</div>
 		<div class="panel-body">
-		  <p class="alert alert-info">
-		    Check to make sure the table was read correctly then presss continue. RegattaHub will analyze the results and send you an email with a link to publish the final results.
-		  </p>
-		  <div class="form-group">
-		    <button ng-click="post()" class="btn btn-success">Continue</button>
-
-		  </div>
-
 		  <table class="table table-striped">
 		    <thead>
 		      <tr>
 			<th>Skipper</th>
 			<th>Club</th>
 			<th>Sail #</th>
-			<th ng-repeat="col in results[0].slice(3)">R{{$index}}</th>
-		      </tr>
+			<% for(var i=3; i<regatta.boats[0].length; i++) { %>
+			   <th>R<%= i %></th>
+			   <% } %>
+			</tr>
 		    </thead>
 		    <tbody>
-		      <tr ng-repeat="row in results track by $index">
-			<td ng-repeat="thing in row track by $index">{{thing}}</td>
-		      </tr>
-		    </tbody>
-		  </table>
-		  <div class="form-group">
-		    <button ng-click="post()" class="btn btn-success">Continue</button>
-		  </div>
+		      <% for(var i=0; i<regatta.boats.length; i++) {%>
+		     <tr>
+		       <td><%= regatta.boats[i][0] %></td>
+		       <td><%= regatta.boats[i][1] %></td>
+		       <td><%= regatta.boats[i][2] %></td>
+		       <% for (var j=3; j<regatta.boats[i].length; j++) { %>
+			  <td><%= regatta.boats[i][j] %></td>
+			  <% } %>
+		     </tr>
+		     <% } %>
 
+		     </tbody>
+		  </table>
 		</div>
 	      </div>
 
@@ -103,26 +121,7 @@
 
   <!-- RegattaHub Scripts -->
   <script>
-    app = angular.module('previewApp', []);
-app.controller('previewCtrl', function($scope, $http, $location){
-    var inputs =<%- JSON.stringify(inputs); %>;
-    $scope.results = JSON.parse(inputs.results);
-    
-    $scope.post = function(){
-	// post to /post/publish
-	// send inputs as the
-	// this will send an email
-	
-	$http.post('/post/publish', {data: inputs}).success(function(data){
-	    if(data.state=="success"){
-		window.location = '/post/thankyou';
-	    } else {
-		window.location = '/post/error';
-		
-	    }
-	})
-    };
-});
+
   </script>
 
   </body>

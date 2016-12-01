@@ -1,257 +1,81 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>RegattaHub</title>
-            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
-
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    
+    <title>Add Regatta</title>
+    <% include ./partials/head.ejs %>
   </head>
   <body>
     <div class="container">
-      <div class="row">
-	<div class="col-md-12">
-	  <div class="page-header">
-	    <h1>RegattaHub <small>Sail Fast</small></h1>
-	  </div>
-	</div>
-      </div>
+      <% include ./partials/header.ejs %>
       <div class="row">
 	<div class="col-md-2">
-	  <ul class="nav nav-stacked">
-	    <li><a class="btn btn-default" href="/post/<%= region %>/<%= boat_class %>">Back to results</a></li>
-	  </ul>
+	  <p><a class="btn btn-default" href="/">Back to results</a></p>
 	</div>
 	
-	<div class="col-md-10">
+	<div class="col-md-10 panel panel-default">
+	  <form action="/post/submit" method="post">
 
-	  <div class="row">
-	    <div class="col-md-12">
-	      
-	      <form action="/post/preview" method="post">
-	      <div class="panel panel-primary">
-		<div class="panel-heading">
-		  <h2 class="panel-title">Regatta Information</h2>
-		</div>
-		<div class="panel-body row">
-		  <div class="form-group col-md-12">
-		    <label for="name">Regatta Name</label>
-		    <input type="text" name="name" placeholder="1875 Regatta" class="form-control" required />
-		  </div>
-		  <div class="form-group col-md-6">
-		    <label for="host">Host Club</label>
-		    <input type="text" name="host" placeholder="Perth Yacht Club" class="form-control" required />
-		  </div>
-
-		  <div class="form-group col-md-6">
-		    <label for="date">Date</label>
-		    <input type="datetime" name="date" class="form-control" placeholder="1875-04-17" required />
-		  </div>
-
-		  <div class="form-group col-md-6">
-		    <label for="region">Region:</label>
-		    <p class="lead"><%= region %></p>
-		    <input type="hidden" name="region" value="<%= region %>" />
-		  </div>
-		  <div class="form-group col-md-6">
-		    <label for="boatClass">Boat Class</label>
-		    <p class="lead"><%= boat_class %></p>
-		    <input type="hidden" name="boat_class" value="<%= boat_class %>" />
-		  </div>
-		  
-		</div>
-	      </div>
-	      <div class="panel panel-primary">
-		<div class="panel-heading">
-		  <h2 class="panel-title">Sailing Rules</h2>
-		</div>
-		<div class="panel-body row">
-		  <div class="form-group col-md-6">
-		    <label for="name">Disqualification Penalty</label>
-		    
-		    <input type="number" name="dsq" value="2" class="form-control"/>
-		    <span class="help-block">DSQs will be scores as fleet+{{ dsq }}</span>
-		    <div class="checkbox">
-		      <label>
-			<input type="checkbox" name="dsq_throwouts" /> DSQs can be thrown out.
-		      </label>
-		    </div>
-		    
-		  </div>
-		  <div class="form-group col-md-6">
-		    <label for="dnf">Did Not Finish Penalty</label>
-		    <input type="number" name="dnf" value="1" class="form-control"/>
-		    <span class="help-block">DNFs will be scores as fleet+{{ dnf }}</span>
-		    <div class="checkbox">
-		      <label>
-			<input type="checkbox" name="dsq_throwouts" checked /> DNFs can be thrown out.
-		      </label>
-		    </div>
-
-		  </div>
-
-		  <div class="form-group col-md-6">
-		    <label for="firstthrowout">Races required for first throwout</label>
-		    <input type="number" name="throwouts" value="6" class="form-control" />
-		  </div>
-		  
-		</div>
-	      </div>
-	    </div>
-	  </div>
-	
-	<div class="panel panel-primary">
-	  <div class="panel-heading">
-	    <h2 class="panel-title">Results</h2>
-	  </div>
-	  <div class="panel-body row" ng-app="uploadApp" ng-controller="uploadCtrl">
-	      <div class="col-md-6">
-		<input type="file" name="fileUpload" id="fileUpload" required />
-		<span class="help-block">Upload a CSV of results matching the format below.<br />
-		  All sail #'s must be unique.<br />
-		<a>Click here</a> for help.</span>
-		<p><a class="btn btn-primary" id="fileUploadBtn">Upload</a></p>
-	      </div>
-	      <div class="col-md-6">
-		<p class="lead alert alert-info">Or record results live <a>here</a></p>
-	      </div>
-
+	    <div class="row">
 	      <div class="col-md-12">
-		<table class="table table-condensed">
-		  <thead>
-		    <tr>
-		      <th>Skipper</th>
-		      <th>Club</th>
-		      <th>Sail #</th>
-		  <th>R1</th>
-		      <th>R2</th>
-		      <th>R3</th>
-		      <th>...</th>
-		    </tr>
-		  </thead>
-		  <tbody>
-		    <tr>
-		      <td>{{results[1][0]}}</td>
-		      <td>{{results[1][1]}}</td>
-		      <td>{{results[1][2]}}</td>
-		      <td>{{results[1][3]}}</td>
-		      <td>{{results[1][4]}}</td>
-		      <td>{{results[1][5]}}</td>
-		      <td>...</td>
-		    </tr>
-		    <tr>
-		      <td>{{results[2][0]}}</td>
-		      <td>{{results[2][1]}}</td>
-		      <td>{{results[2][2]}}</td>
-		      <td>{{results[2][3]}}</td>
-		      <td>{{results[2][4]}}</td>
-		      <td>{{results[2][5]}}</td>
-		      <td>...</td>
-		    </tr>
-		    <tr>
-		      <td>{{results[3][0]}}</td>
-		      <td>{{results[3][1]}}</td>
-		      <td>{{results[3][2]}}</td>
-		      <td>{{results[3][3]}}</td>
-		      <td>{{results[3][4]}}</td>
-		      <td>{{results[3][5]}}</td>
-		      <td>...</td>
-		    </tr>
-		    <tr>
-		      <td>{{results[4][0]}}</td>
-		      <td>{{results[4][1]}}</td>
-		      <td>{{results[4][2]}}</td>
-		      <td>{{results[4][3]}}</td>
-		      <td>{{results[4][4]}}</td>
-		      <td>{{results[4][5]}}</td>
-		      <td>...</td>
-		    </tr>
-		    <tr>
-		      <td>...</td>
-		      <td>...</td>
-		      <td>...</td>
-		      <td>...</td>
-		      <td>...</td>
-		      <td>...</td>
-		      <td>...</td>
-		    </tr>
-		    
-		  </tbody>
-		</table>
-		<input type="hidden" name="results" value="{{results}}" />
-	      </div>
-	    </div>
-	</div>
 
-		      <div class="panel panel-primary">
-		<div class="panel-heading">
-		  <h2 class="panel-title">Contact Information</h2>
+		<h2>New Event</h2>
+	      </div>
+		<div class="form-group col-md-12">
+		  <label for="name">Regatta Name</label>
+		  <input type="text" name="name" placeholder="My Regatta" class="form-control" required />
 		</div>
-		<div class="panel-body row">
-		  <div class="form-group col-md-6">
-		    <label for="email">Email Address</label>
-		    <input type="email" name="email" placeholder="jamescollins@catalpa.com" class="form-control" required />
-		    <span class="help-block">We promise to keep your email private. We are going to send you a link to edit your course.</span>
-		  </div>
+		<div class="form-group col-md-6">
+		  <label for="host">Host Club</label>
+		  <input type="text" name="host" placeholder="My Yacht Club" class="form-control" required />
+		</div>
+		<div class="form-group col-md-3">
+		  <label for="city">City</label>
+		  <input type="text" name="city" placeholder="City" class="form-control" />
+		</div>
+		<div class="form-group col-md-1">
+		  <label for="state">State</label>
+		  <input type="text" name="state" placeholder="RI" class="form-control" />
+		</div>
+		<div class="form-group col-md-2">
+		  <label for="country">Country</label>
+		  <input type="text" name="country" value="USA" class="form-control" />
+		</div>
+		
+		<div class="form-group col-md-6">
+		  <label for="date">Start Date</label>
+		  <input type="date" name="date" class="form-control" placeholder="2017-08-30" required />
+		  <span class="help-block">YYYY-MM-DD</span>
+		</div>
+
+		<div class="form-group col-md-6">
+		  <label for="boatClass">Boat Class</label>
+		  <input type="text" name="boat_class" placeholder="Multi-class" class="form-control" />
+		</div>
+
+		<div class="form-group col-md-9">
+		  <label for="description">Event Descrition</label>
+		  <textarea rows=5 class="form-control" placeholder="Describe your regatta!"></textarea>
+
+		</div>
+
+		<div class="form-group col-md-9">
+		  <label for="email">Email Address</label>
+		  <input type="email" name="email" placeholder="jamescollins@catalpa.com" class="form-control" required />
+		  <span class="help-block">
+		    We will send the link you need to manage your regatta to this email. It will not be displayed publically or shared.
+		  </span>
 		  <input name="gotcha" type="text" style="display:none" />
-		  <!-- only robots fill this out -->
+		</div>
+		<!-- only robots fill this out -->
+		<div class="form-group col-md-12">
+		  <input class="btn btn-success btn-lg" type="submit" value="Submit"/>
 		</div>
 	      </div>
-	
-	<div class="row">
-	  <div class="col-md-12">
-	    <div class="pull-right">
-	      <input class="btn btn-success btn-lg" type="submit" value="submit"/>
-	  </form>
 	    </div>
-	    
-	  </div>
-	</div>
-	</div>
-      <div class="footer">
-	<p>&copy; 2016 Shomberg Systems
+	  </form>
+	  
       </div>
-      </div>
-    <!-- Pull in angular scripts -->
-    <!-- CND for JQUERY -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> 
-    
-    <!-- CND for bootstrap and font-awesome -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    
-    <!-- CND for angular -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.min.js"></script>
-
-    <!-- RegattaHub Scripts -->
-    <script>
-
-      var app = angular.module('uploadApp', []);
-      app.controller('uploadCtrl', function($scope){
-      
-      $scope.results = [];
-      document.getElementById('fileUploadBtn').onclick=function(event){
-      fr = new FileReader()
-      fr.onload = function(e){
-      $scope.results = [];
-      var results_raw = e.target.result;
-      var lines = results_raw.split('\n');
-      for (ii in lines){
-      var currentline=lines[ii].split(',');
-      $scope.results.push(currentline);
-      }
-      $scope.$apply();
-      }
-
-      fr.readAsText(document.getElementById('fileUpload').files[0]);
-      }
-      });
-
-    </script>
-
+      <% include ./partials/foot.ejs %>
+    </div>
   </body>
 </html>

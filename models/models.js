@@ -6,10 +6,22 @@ var RegattaSchema = new Schema(
     {created_by: String // email
      ,created_at: {type: Date, default: Date.now}
      ,event_name: String
-     ,event_location: String
-     ,event_date: String
-     ,results: [ {} ]
+     ,event_location: {country: String
+		       ,state: String
+		       ,city: String	 
+		      }
+     ,event_host: String
+     ,event_date: Date
+     ,boat_class: String
+     ,sailing_rules:{dsq: Number
+		     ,throwout_dsq: Boolean
+		     ,dnf: Number
+		     ,throwout_dnf: Boolean
+		     ,throwouts: [ Number ]
+		    }
+     ,results: [ ]
      ,passkey: String
+     ,published: {type: Boolean, default: false}
      // and more
     }
 );
@@ -31,5 +43,5 @@ var ClubSchema = new Schema(
 );
 
 mongoose.model('Regatta', RegattaSchema);
-mongoose.model('Sailor', SailorSchema);
-mongoose.model('Club', ClubSchema);
+//mongoose.model('Sailor', SailorSchema);
+//mongoose.model('Club', ClubSchema);
