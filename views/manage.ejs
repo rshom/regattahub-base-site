@@ -9,25 +9,117 @@
       <% include ./partials/header.ejs %>
       <div class="row">
 	<div class="col-md-2">
-	  <ul class="nav nav-stacked">
-	    <li><a class="btn btn-default" href="/post/">Post Results</a></li>
-	    Some other this here.
-	  </ul>
+	  <p><a class="btn btn-primary" href="">Back to results</a></p>
+	  <p><a href="">Click here</a> if you need help or just email <a href="mailto:support@regattahub.com">support@regattahub.com</a></p>
+	  <p>This column will include other useful links and information to help you set up your event.</p>
 	</div>
-	<div class="col-md-8">
-	  <div class="">
-	      <h1><%= regatta.event_name %></h1>
-	      <p><%= regatta.event_host %> in <%= regatta.event_location.city %>, <%= regatta.event_location.state %></p>
-	      <p><%= regatta.event_date.toLocaleDateString() %></p>
+	<div class="col-md-10" ng-app>
+
+	  <div class="row">
+	      <p class="lead alert alert-warning" ng-hide="true">You must have javascript enabled</p>
+	    <p class="alert alert-danger lead text-center">This is your event's management page. The address is also a password.<br /> <strong>Only share this link with people who you want to edit your event.</strong></p>
+	    <h1><%= regatta.event_name %></h1>
+	    <div ng-hide="regatta.published" class="alert alert-warning text-center">
+	      <p>Your regatta's page is not yet published. Click the button below to allow sailors to find your event.</p>
+	      <p>Unpublished pages will be removed after 45 days</p>
+	      <p><a class="btn btn-primary">Publish</a></p>
+	    </div>
+	    <p ng-show="regatta.published" class="alert alert-success text-center">Your regatta's page is published at <a href="https://127.0.0.1/results/<%= regatta._id %>">https://127.0.0.1/results/<%= regatta._id %></a></p>
+
+	    <div class="" id="myApp" ng-view>
+	    <ul class="nav nav-tabs">
+	      <li class="active"><a class="" href="">Update Information</a></li>
+	      <li><a class="" href="">Edit Schedule</a></li>
+	      <li><a class="" href="">Add sailing rules</a></li>
+	      <li><a class="" href="">Post results</a></li>
+	      <li><a class="" href="">Add Pictures</a></li>
+	    </ul>
+
+	      <!-- this will go into a view -->
+	      <form>
+		<h2>Basic Information</h2>
+		<div class="row">
+		<div class="form-group col-md-6">
+		  <label for="event_name">Event Name</label>
+		  <input type="text" name="event_name" value="{{regatta.event_name}}" class="form-control" placeholder="Event Name" />
+		</div>
+		<div class="form-group col-md-6">
+		  <label for="event_name">Start Date</label>
+		  <input type="text" name="event_date" value="{{regatta.event_date}}" class="form-control" placeholder="YYYY-MM-DD" />
+		  <span class="help-block">YYYY-MM-DD</span>
+		</div>
+		</div>
+		<div class="form-group">
+		  <label for="event_host">Event Host</label>
+		  <input type="text" name="event_host" value="{{regatta.event_host}}" class="form-control" placeholder="Host Club" />
+		</div>
+		<div class="form-group">
+		  <label for="boat_class">Class</label>
+		  <input type="text" name="boat_class" value="{{regatta.boat_class}}" class="form-control" placeholder="Class" />
+		  <span class="help-block">When a single regatta has multiple fleets, we recommend creating seperate events for each class. This helps sailors find your event easier. Just link all the class pages to the same registration page.</span>
+		</div>
+
+		<div class="form-group">
+		  <label for="event_description">Event Description</label>
+		  <textarea class="form-control" rows=5 placeholder="Describe your event..."></textarea>
+		</div>
+
+		<div class="form-group">
+		  <label for="registration_page">Registration Page</label>
+		  <input type="text" name="event_host" value="{{regatta.registration_page}}" class="form-control" placeholder="http://hostwebsite.com/regatta/registration" />
+		  <span class="help-block">RegattaHub can manage registration for you. <a href="">Learn more.</a>
+		</div>
+		<h2>Location</h2>
+		<div class="row">
+		  <div class="form-group col-md-12">
+		    <label>Host Address</label>
+		    <input type="text" name="address_street" value="{{regatta.location.street}}" placeholder="Street Address" class="form-control" />
+		  </div>
+		  <div class="form-group col-md-6">
+		    <label>City</label>
+		    <input type="text" name="address_city" value="{{regatta.location.city}}" placeholder="City" class="form-control" />
+		  </div>
+		  <div class="form-group col-md-3">
+		    <label>State</label>
+		    <input type="text" name="address_state" value="{{regatta.location.state}}" placeholder="State" class="form-control" />
+		  </div>
+		  <div class="form-group col-md-3">
+		    <label>Country</label>
+		    <input type="text" name="address_country" value="{{regatta.location.country}}" placeholder="Country" class="form-control" />
+		  </div>
+		</div>
+		<h3>Course Location</h3>
+		<span class="help-block">Use RegattaHub to help set and run your course. <a href="">Learn more.</a></span>
+		<div class="row">
+		  <div class="form-group col-md-6">
+		  <label>Latitude</label>
+		    <input type="text" name="location_lat" value="{{regatta.location.lat}}" placeholder="47.0000" class="form-control" />
+		  </div>
+		  <div class="form-group col-md-6">
+		  <label>Longitude</label>
+		    <input type="text" name="location_lng" value="{{regatta.location.lng}}" placeholder="157.00000" class="form-control" />
+		  </div>
+		</div>
+		<div class="row">
+		  <div class="form-group col-md-12">
+		    <input type="submit" value="Update" class="btn btn-primary" />
+		  </div>
+		</div>
+		
+	      </form>
+
+
+	      <!-- end view -->
+	    </div>
+	    
 	</div>
 	  
       </div>
-      <div class="col-md-2">
-	Something else here.
-    </div>
 </div>
+<script>
+  var regatta=<%- JSON.stringify(regatta) %>;
+</script>
 
 <% include ./partials/foot.ejs %>
-
   </body>
 </html>
