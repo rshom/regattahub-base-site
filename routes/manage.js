@@ -10,11 +10,10 @@ router.get('/:id/:key/', function(req,res,next) {
     Regatta.findOne({'_id':req.params.id}, function (err, regatta) {
 	if (err)
 	    res.redirect('/post/error');
-	console.log(regatta);
 	if (!bcrypt.compareSync(req.params.key, regatta.passkey))
 		res.redirect('/post/error');
 
-	res.render('manage',{regatta:regatta});
+	res.render('manage',{regatta:regatta, key:req.params.key});
     });
 });
 

@@ -8,7 +8,10 @@ var RegattaSchema = new Schema(
      ,event_name: String
      ,event_location: {country: String
 		       ,state: String
-		       ,city: String	 
+		       ,city: String
+		       ,street: String
+		       ,lat: Number
+		       ,lng: Number
 		      }
      ,event_host: String
      ,event_date: Date
