@@ -15,7 +15,9 @@ var RegattaSchema = new Schema(
 		      }
      ,event_host: String
      ,event_date: Date
-     ,boat_class: String
+     ,boat_class: [ String ]
+     ,event_description: String
+     ,registration_site: String
      ,sailing_rules:{dsq: Number
 		     ,throwout_dsq: Boolean
 		     ,dnf: Number

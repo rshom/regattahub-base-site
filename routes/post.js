@@ -23,7 +23,6 @@ router.get('/', function(req,res,next) {
 router.post('/submit',function(req,res) {
     // I can definitely modularize this more
     // set publish to unpublished
-    console.log(req.body);
     var input = req.body;
     if (!validate_data(input)){
 	res.redirect("/error");
@@ -39,9 +38,10 @@ router.post('/submit',function(req,res) {
     regatta.event_location.city = input.city;
     regatta.event_location.state = input.state;
     regatta.event_location.country = input.country;
-    regatta.descript = input.description;
+    regatta.event_description = input.event_description;
+    regatta.registration_site = input.registration_site;
     regatta.event_date = input.date;
-    regatta.boat_class = input.boat_class;
+    regatta.boat_class = input.boat_class.split(',');
     var passkey = randomstring.generate(7);
     bcrypt.hash(passkey,10,function(err,hash){
 	regatta.passkey = hash;
@@ -60,12 +60,13 @@ router.post('/submit',function(req,res) {
 	var mailOptions = {
 	    from: mailAuth.auth.user,
 	    to: regatta.created_by,
-	    subject: "POST/EDIT/DELETE "+regatta.name,
+	    subject: "POST/EDIT/DELETE "+regatta.event_name,
 	    text: text
 	};
     console.log(mailOptions);
 	transporter.sendMail(mailOptions, function(error,info){
 	    if(error){
+		console.log(error)
 		res.redirect('/post/error');
 	    } else {
 		console.log('Message sent :' + info.response);

@@ -110,6 +110,8 @@ router.get('/recent/:boat_class', function(req, res, next) {
 
 });
 */
+
+
 // about page
 
 // contact page

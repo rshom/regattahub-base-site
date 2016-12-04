@@ -10,25 +10,64 @@
     <% include ./partials/header.ejs %>
       <div class="row">
 	<div class="col-md-2">
-	  <ul class="nav nav-stacked">
-	    <li><a class="btn btn-default" href="/post/">Add Regatta</a></li>
+	  <ul class="nav nav-pills nav-stacked">
+	    <li class="<%- timeline=="now" ? 'active' : '' %>"><a class="" href="/now">This Month</a></li>
+	    <li class="<%- timeline=="future" ? 'active' : '' %>"><a class="" href="/future">Future</a></li>
+	    <li class="<%- timeline=="recent" ? 'active' : '' %>"><a class="" href="/recent">Recent</a></li>
 	  </ul>
+	  <!-- no where yet
+	  <h3>Where</h3>
+	  <ul class="nav nav-pills nav-stacked">
+	    <li class="active"><a>All</a></li>
+	    <li><a>Newport</a></li>
+	    <li><a>Providence</a></li>
+	  </ul>
+	  <!-- end where -->
+
+
 	</div>
 	<div class="col-md-8">
-	  <div class="">
+	  <div class="row">
+	    <div class="col-md-12">
+	      <p class="pull-left">
+		<a class="btn btn-default" href="/post/">Add Regatta</a>
+	      </p>
+	      <div class="col-md-6">
+		<div class="input-group">
+		  <!-- search button probably unnecessary
+		  <input type="text" class="form-control" placeholder="Search for...">
+		  <span class="input-group-btn">
+		    <button class="btn btn-default" type="button">Go!</button>
+		  </span>
+		  <!---->
+		</div>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="row">
 	    <%  regattas.reverse().forEach(function(regatta){%>
-	    <div>
-	      <h3><a href="/results/<%= regatta._id %>"><%= regatta.event_name %></a></h3>
-	      <p><%= regatta.event_host %> in <%= regatta.event_location %></p>
-	      <p><%= regatta.event_date %></p>
+	    <div class="col-md-12">
+	      <h3><small><%= regatta.event_date.toDateString() %></small> <a href="/results/<%= regatta._id %>"><%= regatta.event_name %></a> <small><strong><%= regatta.event_host %></strong> - <%= regatta.event_location.city %>, <%=regatta.event_location.state%></small></h3>
+	      <span class="help-block">Classes: <%=regatta.boat_class%></span>
 	    </div>
 	    <% }); %>
 	</div>
 
 	</div>
 	<div class="col-md-2">
-
-	  <% include ./partials/class_list.ejs %>
+	  <!-- class list
+	  <ul class="nav nav-pills nav-stacked">
+	    <h3>Class</h3>
+	    <li class="active"><a class="" href="./">All</a></li>
+	    <li><a class="" href="/<%=timeline%>/multi-class">Mult-Class</a></li>
+	    <li><a class="" href="/<%=timeline%>/jy15">JY-15</a></li>
+	    <li><a class="" href="/<%=timeline%>/laser">Laser</a></li>
+	    <li><a class="" href="/<%=timeline%>/laserradial">Laser Radial</a></li>
+	    <li><a class="" href="/<%=timeline%>/laser47">Laser 4.7</a></li>
+	    <li><a class="" href="/<%=timeline%>/opti">Optimist</a></li>
+	    <li><a class="" href="/<%=timeline%>/other">Other</a></li>
+	  </ul>
+	  -->
 	</div>
     </div>
 

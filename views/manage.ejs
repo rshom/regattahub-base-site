@@ -18,12 +18,17 @@
 	  <div class="row">
 	      <p class="lead alert alert-warning" ng-hide="true">You must have javascript enabled</p>
 	    <p class="alert alert-danger lead text-center">This is your event's management page. The address is also a password.<br /> <strong>Only share this link with people who you want to edit your event.</strong></p>
-	    <div ng-hide="regatta.published" class="alert alert-warning text-center">
+	    <div ng-hide="<%=regatta.published%>" class="alert alert-warning text-center">
 	      <p>Your regatta's page is not yet published. Click the button below to allow sailors to find your event.</p>
 	      <p>Unpublished pages will be removed after 45 days</p>
-	      <p><a class="btn btn-primary">Publish</a></p>
+	      <form action="/manage/<%=regatta._id%>/<%=key%>/publish" method="post">
+		<div class="form-group">
+		  <input type="submit" value="publish" class="btn btn-primary" />
+		</div>
+
+	      </form>
 	    </div>
-	    <p ng-show="regatta.published" class="alert alert-success text-center">Your regatta's page is published at <a href="https://127.0.0.1/results/<%= regatta._id %>">https://127.0.0.1/results/<%= regatta._id %></a></p>
+	    <p ng-show="<%=regatta.published%>" class="alert alert-success text-center">Your regatta's page is published at <a href="http://127.0.0.1:3000/results/<%= regatta._id %>">http://127.0.0.1:3000/results/<%= regatta._id %></a></p>
 
 	    <h1><%= regatta.event_name %></h1>
 	    <div class="well">
@@ -38,7 +43,7 @@
 		</div>
 		<div class="form-group col-md-6">
 		  <label for="event_name">Start Date</label>
-		  <input type="text" name="event_date" value="<%=regatta.event_date %>" class="form-control" placeholder="YYYY-MM-DD" />
+		  <input type="text" name="event_date" value="<%=regatta.event_date.toLocaleDateString() %>" class="form-control" placeholder="YYYY-MM-DD" />
 		  <span class="help-block">YYYY-MM-DD</span>
 		</div>
 		</div>
@@ -49,17 +54,17 @@
 		<div class="form-group">
 		  <label for="boat_class">Class</label>
 		  <input type="text" name="boat_class" value="<%=regatta.boat_class%>" class="form-control" placeholder="Class" />
-		  <span class="help-block">When a single regatta has multiple fleets, we recommend creating seperate events for each class. This helps sailors find your event easier. Just link all the class pages to the same registration page.</span>
+		  <span class="help-block">Seperate multiple classes by commas</span>
 		</div>
 
 		<div class="form-group">
 		  <label for="event_description">Event Description</label>
-		  <textarea class="form-control" rows=5 placeholder="Describe your event..."><%= regatta.event_description ? regatta.event_description:'' %></textarea>
+		  <textarea name="event_description" class="form-control" rows=5 placeholder="Describe your event..."><%= regatta.event_description ? regatta.event_description:'' %></textarea>
 		</div>
 
 		<div class="form-group">
-		  <label for="registration_page">Registration Page</label>
-		  <input type="text" name="event_host" value="<%=regatta.registration_page%>" class="form-control" placeholder="http://hostwebsite.com/regatta/registration" />
+		  <label for="registration_site">Registration Page</label>
+		  <input type="text" name="registration_site" value="<%=regatta.registration_site%>" class="form-control" placeholder="http://hostwebsite.com/regatta/registration" />
 		  <span class="help-block">RegattaHub can manage registration for you. <a href="">Learn more.</a></span>
 		</div>
 		<div class="row">
@@ -78,19 +83,19 @@
 
 		  <div class="form-group col-md-12">
 		    <label>Host Address</label>
-		    <input type="text" name="address_street" value="<%=regatta.location.street%>" placeholder="Street Address" class="form-control" />
+		    <input type="text" name="address_street" value="<%=regatta.event_location.street%>" placeholder="Street Address" class="form-control" />
 		  </div>
 		  <div class="form-group col-md-6">
 		    <label>City</label>
-		    <input type="text" name="address_city" value="<%=regatta.location.city%>" placeholder="City" class="form-control" />
+		    <input type="text" name="address_city" value="<%=regatta.event_location.city%>" placeholder="City" class="form-control" />
 		  </div>
 		  <div class="form-group col-md-3">
 		    <label>State</label>
-		    <input type="text" name="address_state" value="<%=regatta.location.state%>" placeholder="State" class="form-control" />
+		    <input type="text" name="address_state" value="<%=regatta.event_location.state%>" placeholder="State" class="form-control" />
 		  </div>
 		  <div class="form-group col-md-3">
 		    <label>Country</label>
-		    <input type="text" name="address_country" value="<%=regatta.location.country%>" placeholder="Country" class="form-control" />
+		    <input type="text" name="address_country" value="<%=regatta.event_location.country%>" placeholder="Country" class="form-control" />
 		  </div>
 		</div>
 		<h3>Course Location</h3>
@@ -98,11 +103,11 @@
 		<div class="row">
 		  <div class="form-group col-md-6">
 		  <label>Latitude</label>
-		    <input type="text" name="location_lat" value="<%=regatta.location.lat%>" placeholder="47.0000" class="form-control" />
+		    <input type="text" name="location_lat" value="<%=regatta.event_location.lat%>" placeholder="47.0000" class="form-control" />
 		  </div>
 		  <div class="form-group col-md-6">
 		  <label>Longitude</label>
-		    <input type="text" name="location_lng" value="<%=regatta.location.lng%>" placeholder="157.00000" class="form-control" />
+		    <input type="text" name="location_lng" value="<%=regatta.event_location.lng%>" placeholder="157.00000" class="form-control" />
 		  </div>
 		</div>
 		<div class="row">
