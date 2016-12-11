@@ -6,6 +6,7 @@ var logger = require('morgan'); // logger for development
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser'); // read inside of http requests
 var mongoose = require('mongoose'); // connection to mongoDB
+var mongoConf = require('./config/mongo');
 
 // initialize mongoose schemas
 require('./models/models');
@@ -28,7 +29,7 @@ var app = express();
 // connect to mongoose
 // change to AWS
 //var mongoConfig = require('./config/mongo');
-mongoose.connect('mongodb://127.0.0.1/test');
+mongoose.connect(mongoConf.uri,mongoConf.options);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
