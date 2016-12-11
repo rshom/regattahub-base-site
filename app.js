@@ -17,9 +17,9 @@ var multer = require('multer');
 
 // require routes
 var index = require('./routes/index');
-var postRoute = require('./routes/post');
-var resultsRoute = require('./routes/results');
-var manageRoute = require('./routes/manage');
+var manage = require('./routes/manage');
+var post = require('./routes/post');
+var regatta = require('./routes/regatta');
 
 
 
@@ -42,9 +42,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
-app.use('/post',postRoute);
-app.use('/results',resultsRoute);
-app.use('/manage',manageRoute);
+app.use('/post',post);
+app.use('/regatta',regatta);
+app.use('/manage',manage);
 //app.use('/users', users);
 
 // catch 404 and forward to error handler

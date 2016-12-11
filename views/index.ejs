@@ -6,15 +6,34 @@
   </head>
   <body>
     <div class="container">
-
+    
     <% include ./partials/header.ejs %>
       <div class="row">
 	<div class="col-md-2">
 	  <ul class="nav nav-pills nav-stacked">
-	    <li class="<%- timeline=="now" ? 'active' : '' %>"><a class="" href="/now">This Month</a></li>
-	    <li class="<%- timeline=="future" ? 'active' : '' %>"><a class="" href="/future">Future</a></li>
-	    <li class="<%- timeline=="recent" ? 'active' : '' %>"><a class="" href="/recent">Recent</a></li>
+	    <li class="<%- timeline=="now" ? 'active' : '' %>"><a class="" href="/now/<%= boat_class %>">This Month</a></li>
+	    <li class="<%- timeline=="future" ? 'active' : '' %>"><a class="" href="/future/<%= boat_class %>">Future</a></li>
+	    <li class="<%- timeline=="recent" ? 'active' : '' %>"><a class="" href="/recent/<%= boat_class %>">Recent</a></li>
 	  </ul>
+	  <!-- search nearby
+	  <hr />
+	  <label>Search Nearby</label>
+	  <div class="form-group input-group">
+	    <input type="number" class="form-control" value=50 />
+	    <span class="input-group-addon">
+	      Mi.
+	    </span>
+	  </div>
+	  <form action="/z" method="post">
+	    <div class="form-group input-group">
+	      <input type="text" class="form-control" placeholder="Zip Code" />
+	      <span class="input-group-btn">
+		<button class="btn btn-default" type="input">Go</button>
+	      </span>
+	    </div>
+	  </form>
+	  <!-- -->
+
 	  <!-- no where yet
 	  <h3>Where</h3>
 	  <ul class="nav nav-pills nav-stacked">
@@ -29,9 +48,11 @@
 	<div class="col-md-8">
 	  <div class="row">
 	    <div class="col-md-12">
+	      <!-- hide public post for now
 	      <p class="pull-left">
 		<a class="btn btn-default" href="/post/">Add Regatta</a>
 	      </p>
+	      <!-- end public post -->
 	      <div class="col-md-6">
 		<div class="input-group">
 		  <!-- search button probably unnecessary
@@ -45,33 +66,155 @@
 	    </div>
 	  </div>
 	  <div class="row">
-	    <%  regattas.reverse().forEach(function(regatta){%>
+	    <%  regattas.forEach(function(regatta){%>
 	    <div class="col-md-12">
-	      <h3><small><%= regatta.event_date.toDateString() %></small> <a href="/results/<%= regatta._id %>"><%= regatta.event_name %></a> <small><strong><%= regatta.event_host %></strong> - <%= regatta.event_location.city %>, <%=regatta.event_location.state%></small></h3>
-	      <span class="help-block">Classes: <%=regatta.boat_class%></span>
+	      <h3><small><%= regatta.event_date.toDateString() %></small> <a href="/regatta/<%= regatta._id %>"><%= regatta.event_name %></a> <small><strong><%= regatta.event_host %></strong> - <%= regatta.address[1] %>, <%=regatta.address[2]%></small></h3>
+	      <span class="help-block">Classes: <%=regatta.class_list.join(', ')%></span>
 	    </div>
 	    <% }); %>
 	</div>
 
 	</div>
 	<div class="col-md-2">
-	  <!-- class list
+	  <!-- class list -->
 	  <ul class="nav nav-pills nav-stacked">
-	    <h3>Class</h3>
-	    <li class="active"><a class="" href="./">All</a></li>
-	    <li><a class="" href="/<%=timeline%>/multi-class">Mult-Class</a></li>
-	    <li><a class="" href="/<%=timeline%>/jy15">JY-15</a></li>
-	    <li><a class="" href="/<%=timeline%>/laser">Laser</a></li>
-	    <li><a class="" href="/<%=timeline%>/laserradial">Laser Radial</a></li>
-	    <li><a class="" href="/<%=timeline%>/laser47">Laser 4.7</a></li>
-	    <li><a class="" href="/<%=timeline%>/opti">Optimist</a></li>
-	    <li><a class="" href="/<%=timeline%>/other">Other</a></li>
+	    <li class="<%- boat_class == '' ? 'active' : '' %>"><a class="" href="./">All</a></li>
+	    <li class="<%- boat_class == 'other' ? 'active' : '' %>"><a class="" href="/<%=timeline%>/other">Other</a></li>
+	    <% var classes =
+	       ["A-Class"
+	       ,"Albacore"
+	       ,"Arrow"
+	       ,"A Scow"
+	       ,"Atlantic"
+	       ,"Beetle Cat"
+	       ,"Blue Jay"
+	       ,"Bongo"
+	       ,"Buccaneer"
+	       ,"Bullseye"
+	       ,"Cal 20"
+	       ,"Capri 14.2"
+	       ,"Capri 22"
+	       ,"Capri 25"
+	       ,"Catalina 22"
+	       ,"CC Knockabout"
+	       ,"CC Mercury"
+	       ,"Chesapeake 20"
+	       ,"CFJ"
+	       ,"Club 420"
+	       ,"Colgate 26"
+	       ,"Coronado 15"
+	       ,"C Scow"
+	       ,"Day Sailer"
+	       ,"DN Iceboat"
+	       ,"Dragon"
+	       ,"Elliot 6m"
+	       ,"Ensign"
+	       ,"E Scow"
+	       ,"Etchells"
+	       ,"Europe"
+	       ,"F-18"
+	       ,"Finn"
+	       ,"Fireball"
+	       ,"505"
+	       ,"5.5 Metre"
+	       ,"420"
+	       ,"470"
+	       ,"Flying Dutchman"
+	       ,"Flying Scot"
+	       ,"Flying Tern"
+	       ,"Flying Tiger"
+	       ,"Front Runner"
+	       ,"Hampton OD"
+	       ,"Harbor 20"
+	       ,"Harpoon 4.6"
+	       ,"Harpoon 5.2"
+	       ,"Herreshoff 12.5"
+	       ,"Highlander"
+	       ,"Holder 20"
+	       ,"I-20 (Inland 20 Scow)"
+	       ,"IC24"
+	       ,"Ideal 18"
+	       ,"Interclub"
+	       ,"Interlake"
+	       ,"Int'l 14"
+	       ,"Int'l 110"
+	       ,"Int'l 210"
+	       ,"Int'l Canoe"
+	       ,"Int'l FJ"
+	       ,"Int'l OD"
+	       ,"J-22"
+	       ,"J-24"
+	       ,"J-70"
+	       ,"J-80"
+	       ,"J-105"
+	       ,"Jet 14"
+	       ,"Johnson 18"
+	       ,"JY 15"
+	       ,"Knarr"
+	       ,"Laser"
+	       ,"Lehman 12"
+	       ,"Lido 14"
+	       ,"Lightning"
+	       ,"Luders 16"
+	       ,"M16 Scow"
+	       ,"M20 Scow"
+	       ,"Martin 242"
+	       ,"MC Scow"
+	       ,"Melges 17"
+	       ,"Melges 20"
+	       ,"Melges 24"
+	       ,"Melges 32"
+	       ,"Mercury (CA)"
+	       ,"Mercury (CC)"
+	       ,"Mobjack"
+	       ,"Moore 24"
+	       ,"Moth Int'l"
+	       ,"Mutineer"
+	       ,"Narrasketuck"
+	       ,"National OD"
+	       ,"Nomad"
+	       ,"One Design 14"
+	       ,"Optimist"
+	       ,"PC"
+	       ,"Penguin"
+	       ,"Rebel"
+	       ,"Rhodes 18"
+	       ,"Rhodes 19"
+	       ,"Sabot"
+	       ,"Santana 20"
+	       ,"Schock 35"
+	       ,"Sea Dog"
+	       ,"Shark"
+	       ,"Shields"
+	       ,"Snipe"
+	       ,"Soling"
+	       ,"Sonar"
+	       ,"Star"
+	       ,"Sunfish"
+	       ,"Sweet 16"
+	       ,"T-10"
+	       ,"Thistle"
+	       ,"Tornado Sport"
+	       ,"Turnabout"
+	       ,"2.4m R"
+	       ,"Ultimate 20"
+	       ,"Viper 640"
+	       ,"VX One"
+	       ,"Wayfarer"
+	       ,"Windmill"
+	       ,"X Boat"
+	       ,"Y Flyer"
+	       ,"Yngling"
+	       ];
+	       %>
+	    <% for (var i=0;i<classes.length;i++) { %>
+	       <li class="<%- boat_class == classes[i] ? 'active' : '' %>"><a class="" href="/<%=timeline%>/<%=classes[i].replace(' ','_')%>"><%=classes[i]%></a></li>
+	     <% } %>
 	  </ul>
-	  -->
 	</div>
-    </div>
+      </div>
 
       <% include ./partials/foot.ejs %>
-      </div>
+    </div>
   </body>
 </html>

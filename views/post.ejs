@@ -10,80 +10,217 @@
       <div class="row">
 	<div class="col-md-2">
 	  <ul class="nav">
-	    <li><a class="btn" href="/">Back to results</a></li>
+	    <li><a class="btn btn-default" href="/">Back</a></li>
 	  </ul>
 	</div>
 	
-	<div class="col-md-10 well">
-	  <form action="/post/submit" method="post">
-
+	<div class="col-md-8">
+	  <form action="/post/" method="post">
+	    
+	    <div class="form-group">
+	      <label for="event-name">Event Name</label>
+	      <p><input type="text" name="event_name" placeholder="My Regatta" class="form-control" required /></p>
+	    </div>
+	    
 	    <div class="row">
-	      <div class="col-md-12">
-
-		<h2>New Event</h2>
+	      <div class="form-group col-md-6">
+		<label for="event-date">Event Date</label>
+		<p><input type="date" name="event_date" placeholder="2016-12-08"  class="form-control" required /></p>
+		<p class="help-block">YYYY-MM-DD</p>
 	      </div>
-		<div class="form-group col-md-12">
-		  <label for="name">Regatta Name</label>
-		  <input type="text" name="name" placeholder="My Regatta" class="form-control" required />
-		</div>
-		<div class="form-group col-md-6">
-		  <label for="host">Host Club</label>
-		  <input type="text" name="host" placeholder="My Yacht Club" class="form-control" required />
-		</div>
-		<div class="form-group col-md-3">
-		  <label for="city">City</label>
-		  <input type="text" name="city" placeholder="City" class="form-control" />
-		</div>
-		<div class="form-group col-md-1">
-		  <label for="state">State</label>
-		  <input type="text" name="state" placeholder="RI" class="form-control" />
-		</div>
-		<div class="form-group col-md-2">
-		  <label for="country">Country</label>
-		  <input type="text" name="country" value="USA" class="form-control" />
-		</div>
-		
-		<div class="form-group col-md-6">
-		  <label for="date">Start Date</label>
-		  <input type="date" name="date" class="form-control" placeholder="2017-08-30" equired />
-		  <span class="help-block">YYYY-MM-DD</span>
-		</div>
-
-		<div class="form-group col-md-6">
-		  <label for="boat_class">Boat Class</label>
-		  <input type="text" name="boat_class" placeholder="Laser, Club 420" class="form-control" />
-		  <span class="help-block">Seperate multiple classes by commas</span>
-		</div>
-
-		<div class="form-group col-md-9">
-		  <label for="description">Event Descrition</label>
-		  <textarea rows=5 class="form-control" name="event_description" placeholder="Describe your regatta!"></textarea>
-		</div>
-
-		<div class="form-group col-md-9">
-		  <label for="registration_site">Registration Site</label>
-		  <input type="url" name="registration_site" placeholder="http://example.com" class="form-control" />
-<span class="help-block">RegattaHub can handle registration for you. <a href="">Learn more.</a></span>
-		</div>
-
-		<div class="form-group col-md-9">
-		  <label for="email">Email Address</label>
-		  <input type="email" name="email" placeholder="jamescollins@catalpa.com" class="form-control" required />
-		  <span class="help-block">
-		    We will send the link you need to manage your regatta to this email. It will not be displayed publically or shared.
-		  </span>
-		  <input name="gotcha" type="text" style="display:none" />
-		</div>
-		<!-- only robots fill this out -->
-		<div class="form-group col-md-12">
-		  <input class="btn btn-success btn-lg" type="submit" value="Submit"/>
-		</div>
+	      
+	      <div class="form-group col-md-6">
+		<label for="event_length">Length</label>
+		<p><input type="number" name="event_length" value="1" class="form-control" /></p>
+		<p class="help-block">Days</p>
 	      </div>
 	    </div>
+
+
+	    <div class="form-group row col-md-12">
+	      <label for="class-list">Competing Classes</label>
+	      <p class="help-block">Select classes which will be completing in your regatta. This will allow sailors to search for your regatta using our filter system.</p>
+	      <div class="checkbox">
+<label class="col-md-3"><input type="checkbox" name="class-Multi-Class"><strong>Multi-Class</strong></label>
+<label class="col-md-3"><input type="checkbox" name="class-Other"><strong>Other</strong></label>
+<br />
+<br />
+<label class="col-md-3"><input type="checkbox" name="class-A-Class">A-Class</label>
+<label class="col-md-3"><input type="checkbox" name="class-Albacore">Albacore</label>
+<label class="col-md-3"><input type="checkbox" name="class-Arrow">Arrow</label>
+<label class="col-md-3"><input type="checkbox" name="class-A Scow">A Scow</label>
+<label class="col-md-3"><input type="checkbox" name="class-Atlantic">Atlantic</label>
+<label class="col-md-3"><input type="checkbox" name="class-Beetle Cat">Beetle Cat</label>
+<label class="col-md-3"><input type="checkbox" name="class-Blue Jay">Blue Jay</label>
+<label class="col-md-3"><input type="checkbox" name="class-Bongo">Bongo</label>
+<label class="col-md-3"><input type="checkbox" name="class-Buccaneer">Buccaneer</label>
+<label class="col-md-3"><input type="checkbox" name="class-Bullseye">Bullseye</label>
+<label class="col-md-3"><input type="checkbox" name="class-Cal 20">Cal 20</label>
+<label class="col-md-3"><input type="checkbox" name="class-Capri 14.2">Capri 14.2</label>
+<label class="col-md-3"><input type="checkbox" name="class-Capri 22">Capri 22</label>
+<label class="col-md-3"><input type="checkbox" name="class-Capri 25">Capri 25</label>
+<label class="col-md-3"><input type="checkbox" name="class-Catalina 22">Catalina 22</label>
+<label class="col-md-3"><input type="checkbox" name="class-CC Knockabout">CC Knockabout</label>
+<label class="col-md-3"><input type="checkbox" name="class-CC Mercury">CC Mercury</label>
+<label class="col-md-3"><input type="checkbox" name="class-Chesapeake 20">Chesapeake 20</label>
+<label class="col-md-3"><input type="checkbox" name="class-CFJ">CFJ</label>
+<label class="col-md-3"><input type="checkbox" name="class-Club 420">Club 420</label>
+<label class="col-md-3"><input type="checkbox" name="class-Colgate 26">Colgate 26</label>
+<label class="col-md-3"><input type="checkbox" name="class-Coronado 15">Coronado 15</label>
+<label class="col-md-3"><input type="checkbox" name="class-C Scow">C Scow</label>
+<label class="col-md-3"><input type="checkbox" name="class-Day Sailer">Day Sailer</label>
+<label class="col-md-3"><input type="checkbox" name="class-DN Iceboat">DN Iceboat</label>
+<label class="col-md-3"><input type="checkbox" name="class-Dragon">Dragon</label>
+<label class="col-md-3"><input type="checkbox" name="class-Elliot 6m">Elliot 6m</label>
+<label class="col-md-3"><input type="checkbox" name="class-Ensign">Ensign</label>
+<label class="col-md-3"><input type="checkbox" name="class-E Scow">E Scow</label>
+<label class="col-md-3"><input type="checkbox" name="class-Etchells">Etchells</label>
+<label class="col-md-3"><input type="checkbox" name="class-Europe">Europe</label>
+<label class="col-md-3"><input type="checkbox" name="class-F-18">F-18</label>
+<label class="col-md-3"><input type="checkbox" name="class-Finn">Finn</label>
+<label class="col-md-3"><input type="checkbox" name="class-Fireball">Fireball</label>
+<label class="col-md-3"><input type="checkbox" name="class-505">505</label>
+<label class="col-md-3"><input type="checkbox" name="class-5.5 Metre">5.5 Metre</label>
+<label class="col-md-3"><input type="checkbox" name="class-420">420</label>
+<label class="col-md-3"><input type="checkbox" name="class-470">470</label>
+<label class="col-md-3"><input type="checkbox" name="class-Flying Dutchman">Flying Dutchman</label>
+<label class="col-md-3"><input type="checkbox" name="class-Flying Scot">Flying Scot</label>
+<label class="col-md-3"><input type="checkbox" name="class-Flying Tern">Flying Tern</label>
+<label class="col-md-3"><input type="checkbox" name="class-Flying Tiger">Flying Tiger</label>
+<label class="col-md-3"><input type="checkbox" name="class-Front Runner">Front Runner</label>
+<label class="col-md-3"><input type="checkbox" name="class-Hampton OD">Hampton OD</label>
+<label class="col-md-3"><input type="checkbox" name="class-Harbor 20">Harbor 20</label>
+<label class="col-md-3"><input type="checkbox" name="class-Harpoon 4.6">Harpoon 4.6</label>
+<label class="col-md-3"><input type="checkbox" name="class-Harpoon 5.2">Harpoon 5.2</label>
+<label class="col-md-3"><input type="checkbox" name="class-Herreshoff 12.5">Herreshoff 12.5</label>
+<label class="col-md-3"><input type="checkbox" name="class-Highlander">Highlander</label>
+<label class="col-md-3"><input type="checkbox" name="class-Holder 20">Holder 20</label>
+<label class="col-md-3"><input type="checkbox" name="class-I-20 (Inland 20 Scow)">I-20 (Inland 20 Scow)</label>
+<label class="col-md-3"><input type="checkbox" name="class-IC24">IC24</label>
+<label class="col-md-3"><input type="checkbox" name="class-Ideal 18">Ideal 18</label>
+<label class="col-md-3"><input type="checkbox" name="class-Interclub">Interclub</label>
+<label class="col-md-3"><input type="checkbox" name="class-Interlake">Interlake</label>
+<label class="col-md-3"><input type="checkbox" name="class-Int'l 14">Int'l 14</label>
+<label class="col-md-3"><input type="checkbox" name="class-Int'l 110">Int'l 110</label>
+<label class="col-md-3"><input type="checkbox" name="class-Int'l 210">Int'l 210</label>
+<label class="col-md-3"><input type="checkbox" name="class-Int'l Canoe">Int'l Canoe</label>
+<label class="col-md-3"><input type="checkbox" name="class-Int'l FJ">Int'l FJ</label>
+<label class="col-md-3"><input type="checkbox" name="class-Int'l OD">Int'l OD</label>
+<label class="col-md-3"><input type="checkbox" name="class-J-22">J-22</label>
+<label class="col-md-3"><input type="checkbox" name="class-J-24">J-24</label>
+<label class="col-md-3"><input type="checkbox" name="class-J-70">J-70</label>
+<label class="col-md-3"><input type="checkbox" name="class-J-80">J-80</label>
+<label class="col-md-3"><input type="checkbox" name="class-J-105">J-105</label>
+<label class="col-md-3"><input type="checkbox" name="class-Jet 14">Jet 14</label>
+<label class="col-md-3"><input type="checkbox" name="class-Johnson 18">Johnson 18</label>
+<label class="col-md-3"><input type="checkbox" name="class-JY 15">JY 15</label>
+<label class="col-md-3"><input type="checkbox" name="class-Knarr">Knarr</label>
+<label class="col-md-3"><input type="checkbox" name="class-Laser">Laser</label>
+<label class="col-md-3"><input type="checkbox" name="class-Lehman 12">Lehman 12</label>
+<label class="col-md-3"><input type="checkbox" name="class-Lido 14">Lido 14</label>
+<label class="col-md-3"><input type="checkbox" name="class-Lightning">Lightning</label>
+<label class="col-md-3"><input type="checkbox" name="class-Luders 16">Luders 16</label>
+<label class="col-md-3"><input type="checkbox" name="class-M16 Scow">M16 Scow</label>
+<label class="col-md-3"><input type="checkbox" name="class-M20 Scow">M20 Scow</label>
+<label class="col-md-3"><input type="checkbox" name="class-Martin 242">Martin 242</label>
+<label class="col-md-3"><input type="checkbox" name="class-MC Scow">MC Scow</label>
+<label class="col-md-3"><input type="checkbox" name="class-Melges 17">Melges 17</label>
+<label class="col-md-3"><input type="checkbox" name="class-Melges 20">Melges 20</label>
+<label class="col-md-3"><input type="checkbox" name="class-Melges 24">Melges 24</label>
+<label class="col-md-3"><input type="checkbox" name="class-Melges 32">Melges 32</label>
+<label class="col-md-3"><input type="checkbox" name="class-Mercury (CA)">Mercury (CA)</label>
+<label class="col-md-3"><input type="checkbox" name="class-Mercury (CC)">Mercury (CC)</label>
+<label class="col-md-3"><input type="checkbox" name="class-Mobjack">Mobjack</label>
+<label class="col-md-3"><input type="checkbox" name="class-Moore 24">Moore 24</label>
+<label class="col-md-3"><input type="checkbox" name="class-Moth Int'l">Moth Int'l</label>
+<label class="col-md-3"><input type="checkbox" name="class-Mutineer">Mutineer</label>
+<label class="col-md-3"><input type="checkbox" name="class-Narrasketuck">Narrasketuck</label>
+<label class="col-md-3"><input type="checkbox" name="class-National OD">National OD</label>
+<label class="col-md-3"><input type="checkbox" name="class-Nomad">Nomad</label>
+<label class="col-md-3"><input type="checkbox" name="class-One Design 14">One Design 14</label>
+<label class="col-md-3"><input type="checkbox" name="class-Optimist">Optimist</label>
+<label class="col-md-3"><input type="checkbox" name="class-PC">PC</label>
+<label class="col-md-3"><input type="checkbox" name="class-Penguin">Penguin</label>
+<label class="col-md-3"><input type="checkbox" name="class-Rebel">Rebel</label>
+<label class="col-md-3"><input type="checkbox" name="class-Rhodes 18">Rhodes 18</label>
+<label class="col-md-3"><input type="checkbox" name="class-Rhodes 19">Rhodes 19</label>
+<label class="col-md-3"><input type="checkbox" name="class-Sabot">Sabot</label>
+<label class="col-md-3"><input type="checkbox" name="class-Santana 20">Santana 20</label>
+<label class="col-md-3"><input type="checkbox" name="class-Schock 35">Schock 35</label>
+<label class="col-md-3"><input type="checkbox" name="class-Sea Dog">Sea Dog</label>
+<label class="col-md-3"><input type="checkbox" name="class-Shark">Shark</label>
+<label class="col-md-3"><input type="checkbox" name="class-Shields">Shields</label>
+<label class="col-md-3"><input type="checkbox" name="class-Snipe">Snipe</label>
+<label class="col-md-3"><input type="checkbox" name="class-Soling">Soling</label>
+<label class="col-md-3"><input type="checkbox" name="class-Sonar">Sonar</label>
+<label class="col-md-3"><input type="checkbox" name="class-Star">Star</label>
+<label class="col-md-3"><input type="checkbox" name="class-Sunfish">Sunfish</label>
+<label class="col-md-3"><input type="checkbox" name="class-Sweet 16">Sweet 16</label>
+<label class="col-md-3"><input type="checkbox" name="class-T-10">T-10</label>
+<label class="col-md-3"><input type="checkbox" name="class-Thistle">Thistle</label>
+<label class="col-md-3"><input type="checkbox" name="class-Tornado Sport">Tornado Sport</label>
+<label class="col-md-3"><input type="checkbox" name="class-Turnabout">Turnabout</label>
+<label class="col-md-3"><input type="checkbox" name="class-2.4m R">2.4m R</label>
+<label class="col-md-3"><input type="checkbox" name="class-Ultimate 20">Ultimate 20</label>
+<label class="col-md-3"><input type="checkbox" name="class-Viper 640">Viper 640</label>
+<label class="col-md-3"><input type="checkbox" name="class-VX One">VX One</label>
+<label class="col-md-3"><input type="checkbox" name="class-Wayfarer">Wayfarer</label>
+<label class="col-md-3"><input type="checkbox" name="class-Windmill">Windmill</label>
+<label class="col-md-3"><input type="checkbox" name="class-X Boat">X Boat</label>
+<label class="col-md-3"><input type="checkbox" name="class-Y Flyer">Y Flyer</label>
+<label class="col-md-3"><input type="checkbox" name="class-Yngling">Yngling</label>
+	      </div>
+<p class="help-block"><a class="">Not listed?</a></p>
+	    </div>
+
+
+
+	    <div class="form-group">
+	      <label for="host_id">Host ID</label>
+	      <p class="help-block">Every organization registered with US Sailing has unique ID. Look yours up <a href="http://www1.ussailing.org/membership/memberlookupflname.aspx" target="_blank">here</a>.</p>
+	      <p><input type="text" name="host_id" placeholder="167944D" class="form-control" /></p>
+	      <p class="help-block alert alert-warning">WARNING: By filling the Host ID out the organization will have the power to edit your regatta. However, your regatta will not be listed publically if you do not assign it to registered US Sailing Organization. <br /><br /> You can always add this later.</p>
+	    </div>
+
+	    <div class="form-group">
+	      <label for="registration_link">Registration Link</label>
+	      <p><input type="url" name="registration_link" placeholder="http://my-regatta-website/register" class="form-control" />
+	      <p class="help-block">Where can sailors go to register.</p>
+	    </div>
+
+	    <div class="form-group row">
+	      
+	      <p class="col-md-12">
+		<label for="address">Address</label>
+		<input type="text" name="address" placeholder="Street Address" class="form-control" />
+	      </p>
+	    </div>
+	    <div class="form-group row">
+	      <p class="col-md-6"><input type="text" name="address" placeholder="City" class="form-control" required /></p>
+	      <p class="col-md-3"><input type="text" name="address" placeholder="State" class="form-control" required /></p>
+	      <p class="col-md-3"><input type="text" name="address" placeholder="Zip Code" class="form-control" required /></p>
+	    </div>
+
+
+	    <div class="form-group">
+	      <label for="email">Email Address</label>
+	      <p><input type="email" name="email" placeholder="jamescollins@catalpa.com" class="form-control" required /></p>
+	      <p class="help-block">
+		We will send the link you need to manage your regatta to this email. It will not be displayed publically or shared.
+	      </p>
+	    </div>
+	    
+	    <!-- only robots fill this out -->
+	    <div class="form-group text-center">
+	      <input name="gotcha" type="text" style="display:none" />
+	      <p><input class="btn btn-success btn-lg" type="submit" value="Next"/></p>
+	    </div>
 	  </form>
-	  
+	</div>
       </div>
-      <% include ./partials/foot.ejs %>
-    </div>
+      
+      <div>
+	<% include ./partials/foot.ejs %>
+      </div>
   </body>
 </html>

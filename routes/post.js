@@ -14,10 +14,62 @@ var upload = multer({
 
 
 
-router.get('/', function(req,res,next) {
-    //var region=req.params.region;
-    // right now, the sandbox is the only region that exists for testing
+router.get('/', function(req,res) {
     res.render('post');
+});
+
+router.post('/', function(req,res) {
+    var class_list = [];
+    regatta = new Regatta();
+    for (key in req.body) {
+	if (key.substr(0,6)=="class-") {
+	    class_list.push(key.slice(6));
+	} else {
+	    regatta[key]=req.body[key];
+	}
+    }
+    regatta.class_list = class_list;
+    var passkey = randomstring.generate(7);
+    bcrypt.hash(passkey,10,function(err,hash){
+	regatta.passkey = hash;
+	console.log(regatta);
+	
+	// save it to the database
+	regatta.save(function(err){
+	    if (err)
+		console.log('Didnt save: ' + err);
+	});
+	
+	// send an email with id and key to the user
+	var transporter = nodemailer.createTransport(mailAuth);
+	
+	var text = "http://regattahub.com/manage/"+regatta._id+"/"+passkey;
+	console.log(text);
+	var mailOptions = {
+	    from: mailAuth.auth.user,
+	    to: regatta.created_by,
+	    subject: "POST/EDIT/DELETE "+regatta.event_name,
+	    text: text
+	};
+    console.log(mailOptions);
+	transporter.sendMail(mailOptions, function(error,info){
+	    if(error){
+		console.log(error)
+		res.redirect('/post/error');
+	    } else {
+		console.log('Message sent :' + info.response);
+		res.redirect('/post/thankyou');
+	};
+	});
+    });
+});
+
+router.post('/class', function(req,res) {
+    res.send('todo make class page');
+});
+
+router.post('/description', function(req,res) {
+    res.send('todo make description page');
 });
 
 router.post('/submit',function(req,res) {
@@ -41,7 +93,8 @@ router.post('/submit',function(req,res) {
     regatta.event_description = input.event_description;
     regatta.registration_site = input.registration_site;
     regatta.event_date = input.date;
-    regatta.boat_class = input.boat_class.split(',');
+    regatta.boat_class=req.body.boat_class.replace(/[\s`~!@#$%^&*()_|+\-=?;:'".<>\{\}\[\]\\\/]+/g,'').toLowerCase().split(',');
+
     var passkey = randomstring.generate(7);
     bcrypt.hash(passkey,10,function(err,hash){
 	regatta.passkey = hash;

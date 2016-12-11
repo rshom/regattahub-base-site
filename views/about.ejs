@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>About: RegattaHub</title>
+    <% include ./partials/head.ejs %>
+    
+  </head>
+  <body>
+    <div class="container">
+      <% include ./partials/header.ejs %>
+      <div class="row">
+	<!-- lef sidebar
+	<div class="col-md-2">
+	  <ul class="nav nav-pills nav-stacked">
+	  </ul>
+	</div>
+	<!-- end left sidebar -->
+	<div class="col-md-10">
+	  <h1>About</h1>
+	  <p>we are attempting to provide information and tools to sailors and regatta officials.</p>
+
+	  <p>We pride ourselves on being a responsive organization, willing to flex in whatever way we can to support the sailing community. <a href="mailto:contact@regattahub.com">Email us</a> to let us know how we are doing.</p>
+	</div>
+</div>
+
+<% include ./partials/foot.ejs %>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=1105009586262339";
+  fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+		
+
+  </body>
+</html>

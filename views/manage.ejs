@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= regatta.event_name %>: RegattaHub</title>
+    <title><%= club.name %>: RegattaHub</title>
     <% include ./partials/head.ejs %>
   </head>
   <body>
@@ -9,182 +9,43 @@
       <% include ./partials/header.ejs %>
       <div class="row">
 	<div class="col-md-2">
-	  <p><a class="btn btn-primary" href="">Back to results</a></p>
-	  <p><a href="">Click here</a> if you need help or just email <a href="mailto:support@regattahub.com">support@regattahub.com</a></p>
-	  <p>This column will include other useful links and information to help you set up your event.</p>
+	  <p><a class="btn btn-primary" href="/">Back to home</a></p>
 	</div>
 	<div class="col-md-8" ng-app="manageApp">
+	  <h1><%= club.name %></h1>
+	  <p class="alert alert-danger lead text-center">This is your clubs's management page. The address is also a password.<br /> <strong>Only share this link with people who you want to be able to add/edit your regattas.</strong></p>
+	  <p class="alert alert-info text-center">If you are having any issues, email <a href="mailto:support@regattahub.com">support@regattahub.com</a></p>
 
-	  <div class="row">
-	      <p class="lead alert alert-warning" ng-hide="true">You must have javascript enabled</p>
-	    <p class="alert alert-danger lead text-center">This is your event's management page. The address is also a password.<br /> <strong>Only share this link with people who you want to edit your event.</strong></p>
-	    <div ng-hide="<%=regatta.published%>" class="alert alert-warning text-center">
-	      <p>Your regatta's page is not yet published. Click the button below to allow sailors to find your event.</p>
-	      <p>Unpublished pages will be removed after 45 days</p>
-	      <form action="/manage/<%=regatta._id%>/<%=key%>/publish" method="post">
-		<div class="form-group">
-		  <input type="submit" value="publish" class="btn btn-primary" />
-		</div>
+	  <h2>Events
+	    <a href="./addEvent" class="btn btn-primary">Add event</a>
+	  </h2>
+	  <table class="table table-striped">
+	    <thead>
+	      <tr>
+		<th>Date</th>
+		<th>Name</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      <% for (var i=0;i<regattas.length;i++){ %>
+	      <tr>
+		<td>
+		  <%= regattas[i].event_date.toDateString() %>
+		</td>
+		<td><strong><a href=""><%= regattas[i].event_name %></a></strong></td>
+		<td><a href="" class="btn btn-default">Edit</a></td>
+	      </tr>
+	      <% } %>
+	      <!-- a list of this clubs events -->
+	    </tbody>
+	  </table>
 
-	      </form>
-	    </div>
-	    <p ng-show="<%=regatta.published%>" class="alert alert-success text-center">Your regatta's page is published at <a href="http://127.0.0.1:3000/results/<%= regatta._id %>">http://127.0.0.1:3000/results/<%= regatta._id %></a></p>
-
-	    <h1><%= regatta.event_name %></h1>
-	    <div class="well">
-	      <a name="basic"></a>
-	      <!-- this will go into a view -->
-		<h2>Basic Information</h2>
-		<form action="/manage/<%=regatta._id%>/<%=key%>/basic" method="post">
-		<div class="row">
-		<div class="form-group col-md-6">
-		  <label for="event_name">Event Name</label>
-		  <input type="text" name="event_name" value="<%=regatta.event_name%>" class="form-control" placeholder="Event Name" />
-		</div>
-		<div class="form-group col-md-6">
-		  <label for="event_name">Start Date</label>
-		  <input type="text" name="event_date" value="<%=regatta.event_date.toLocaleDateString() %>" class="form-control" placeholder="YYYY-MM-DD" />
-		  <span class="help-block">YYYY-MM-DD</span>
-		</div>
-		</div>
-		<div class="form-group">
-		  <label for="event_host">Event Host</label>
-		  <input type="text" name="event_host" value="<%=regatta.event_host%>" class="form-control" placeholder="Host Club" />
-		</div>
-		<div class="form-group">
-		  <label for="boat_class">Class</label>
-		  <input type="text" name="boat_class" value="<%=regatta.boat_class%>" class="form-control" placeholder="Class" />
-		  <span class="help-block">Seperate multiple classes by commas</span>
-		</div>
-
-		<div class="form-group">
-		  <label for="event_description">Event Description</label>
-		  <textarea name="event_description" class="form-control" rows=5 placeholder="Describe your event..."><%= regatta.event_description ? regatta.event_description:'' %></textarea>
-		</div>
-
-		<div class="form-group">
-		  <label for="registration_site">Registration Page</label>
-		  <input type="text" name="registration_site" value="<%=regatta.registration_site%>" class="form-control" placeholder="http://hostwebsite.com/regatta/registration" />
-		  <span class="help-block">RegattaHub can manage registration for you. <a href="">Learn more.</a></span>
-		</div>
-		<div class="row">
-		  <div class="form-group col-md-12">
-		    <input type="submit" value="Update Information" class="btn btn-primary" />
-		  </div>
-		</div>
-	      </form>
-	    </div>
-	    <div class="well">
-	      <a name="location"></a>
-	      <h2>Location</h2>
-	      <% if (!regatta.location){regatta.location = {};} %>
-		<div class="row">
-		  <form action="/manage/<%=regatta._id%>/<%=key%>/location" method="post">
-
-		  <div class="form-group col-md-12">
-		    <label>Host Address</label>
-		    <input type="text" name="address_street" value="<%=regatta.event_location.street%>" placeholder="Street Address" class="form-control" />
-		  </div>
-		  <div class="form-group col-md-6">
-		    <label>City</label>
-		    <input type="text" name="address_city" value="<%=regatta.event_location.city%>" placeholder="City" class="form-control" />
-		  </div>
-		  <div class="form-group col-md-3">
-		    <label>State</label>
-		    <input type="text" name="address_state" value="<%=regatta.event_location.state%>" placeholder="State" class="form-control" />
-		  </div>
-		  <div class="form-group col-md-3">
-		    <label>Country</label>
-		    <input type="text" name="address_country" value="<%=regatta.event_location.country%>" placeholder="Country" class="form-control" />
-		  </div>
-		</div>
-		<h3>Course Location</h3>
-		<span class="help-block">Use RegattaHub to help set and run your course. <a href="">Learn more.</a></span>
-		<div class="row">
-		  <div class="form-group col-md-6">
-		  <label>Latitude</label>
-		    <input type="text" name="location_lat" value="<%=regatta.event_location.lat%>" placeholder="47.0000" class="form-control" />
-		  </div>
-		  <div class="form-group col-md-6">
-		  <label>Longitude</label>
-		    <input type="text" name="location_lng" value="<%=regatta.event_location.lng%>" placeholder="157.00000" class="form-control" />
-		  </div>
-		</div>
-		<div class="row">
-		  <div class="form-group col-md-12">
-		    <input type="submit" value="Update Information" class="btn btn-primary" />
-		  </div>
-		</div>
-		</form>
-		
-
-	      <!-- end basic -->
-	    </div>
-
-	    <div class="well">
-	      <a name="schedule"></a>
-	      <h2>Schedule</h2>
-	      <table class="table table-compact">
-		<thead>
-		  <tr>
-		    <th>Time</th>
-		    <th>Location</th>
-		    <th>Event</th>
-		    <th>Notes</th>
-		  </tr>
-		</thead>
-	      </table>
-	      <form>
-		<p>TODO form to add stuff to this</p>
-		<p>TODO buttons next to items to delete them</p>
-		<input type="submit" value="Update Schedule" class="btn btn-primary" />
-	      </form>
-	    </div>
-
-	    <div class="well">
-	      <a name="sailing_rules"></a>
-	      <h2>Sailing Rules</h2>
-	      <form action="/manage/<%=regatta._id%>/<%=key%>/sailing_rules" method="post">
-
-
-		<input type="submit" value="Update Sailing Rules" class="btn btn-primary" />
-	      </form>
-	    </div>
-
-	    <div class="well">
-	      <a name="results"></a>
-	      <h2>Results</h2>
-	      <form action="/manage/<%=regatta._id%>/<%=key%>/results" method="post">
-
-		<input type="submit" value="Update Results" class="btn btn-primary" />
-	      </form>
-
-	    </div>
-
-	    <div class="well">
-	      <a name="pictures"></a>
-	      <h2>Pictures</h2>
-	      <form action="/manage/<%=regatta._id%>/<%=key%>/pictures" method="post">
-
-		<input type="submit" value="Update Pictures" class="btn btn-primary" />
-	      </form>
-
-	    </div>
-
-	    <div class="well">
-	      <a name="social_media"></a>
-	      <h2>Social Media</h2>
-	      <form action="/manage/<%=regatta._id%>/<%=key%>/social_media" method="post">
-		<input type="submit" value="Update Social Media" class="btn btn-primary" />
-	      </form>
-
-	    </div>
-
-	</div>
-	  
+	    
+	  <!-- -->
 	</div>
 	<div class="col-md-2">
 	  <div class="affix">
+	    <!--
       	    <ul class="nav">
 	      <li><a class="" href="#">Back to Top</a></li>
 	      <li><a class="" href="#basic">Basic Information</a></li>
@@ -195,6 +56,7 @@
 	      <li><a class="" href="#pictures">Pictures</a></li>
 	      <li><a class="" href="#social_media">Social Media</a></li>
 	    </ul>
+	    <!-- -->
 	  </div>
       </div>
 
@@ -203,7 +65,6 @@
 
 <% include ./partials/foot.ejs %>
 <script>
-  var regatta=<%- JSON.stringify(regatta) %>;
 </script>
 <script src="/javascripts/manageApp/module.js"></script>
   </body>

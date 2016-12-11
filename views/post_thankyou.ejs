@@ -2,60 +2,30 @@
 <html>
   <head>
     <title>RegattaHub</title>
-            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
-
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <% include ./partials/head.ejs %>
     
   </head>
   <body>
     <div class="container">
-      <div class="row">
-	<div class="col-md-12">
-	  <div class="page-header">
-	    <h1>RegattaHub <small>makes your boat faster</small></h1>
-	  </div>
-	</div>
-      </div>
+    <% include ./partials/header.ejs %>
       <div class="row">
 	<div class="col-md-2">
 	  <ul class="nav nav-stacked">
+	    <li><a class="btn btn-default" href="/">Back to Regattas</a></li>
 	  </ul>
-	   </div>
-	   <div class="col-md-8">
-	     <div class="jumbotron">
-	       <h2>Thank You</h2>
-	     <p>Check you email to continue.</p>
-	     </div>
-
-	   </div>
-	   <div class="col-md-2">
-	     <p><a href="/sandbox/jy15">JY-15</a></p>
-	     <p><a href="/sandbox/laser">Laser</a></p>
-	     <p><a href="/sandbox/laserradial">Laser Radial</a></p>
-	     <p><a href="/sandbox/laser47">Laser 4.7</a></p>
-	     <p><a href="/sandbox/opti">Optimist</a></p>
-	     <p><a href="/sandbox/multi-class">Mult-Class</a></p>
-	     <p><a href="/sandbox/other">Other</a></p>
-	   </div>
+	</div>
+	<div class="col-md-8">
+	  <div class="jumbotron">
+	    <h2>Thank You</h2>
+	    <p>Check you email to continue.</p>
+	  </div>
+	  
+	</div>
+      </div>
+      <% include ./partials/foot.ejs %>
     </div>
-</div>
-
-        <!-- Pull in angular scripts -->
-    <!-- CND for JQUERY -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> 
     
-    <!-- CND for bootstrap and font-awesome -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     
-    <!-- CND for angular -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.min.js"></script>
-
-    <!-- RegattaHub Scripts -->
 
   </body>
 </html>

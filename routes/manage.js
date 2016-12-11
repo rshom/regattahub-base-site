@@ -1,19 +1,30 @@
 var express = require('express');
 var mongoose = require('mongoose');
+var Club = mongoose.model('Club');
 var Regatta = mongoose.model('Regatta');
 var bcrypt = require('bcrypt');
 
 
 var router = express.Router();
 
-router.get('/:id/:key/', function(req,res,next) {
-    Regatta.findOne({'_id':req.params.id}, function (err, regatta) {
-	if (err)
-	    res.redirect('/post/error');
-	if (!bcrypt.compareSync(req.params.key, regatta.passkey))
-	    res.redirect('/post/error');
+router.get('/', function(req,res) {
+    res.send('Try the link sent to your email');
+});
 
-	res.render('manage',{regatta:regatta, key:req.params.key});
+
+router.post('/', function(req,res) {
+    res.send('Sorry, posting to regattahub is currently by invite only. Email russ@regattahub.com if you would like to get involved.');
+});
+
+router.get('/:id/:key', function(req,res,next) {
+    Regatta.findOne({_id:req.params.id}, function(err, regatta){
+	if (err)
+	    res.redirect('/manage');
+	if (!bcrypt.compareSync(req.params.key, regatta.passkey))
+	    res.redirect('/manage');
+
+	res.render('manage_regatta',{regatta:regatta, key:req.params.key});
+
     });
 });
 
@@ -40,10 +51,9 @@ router.post('/:id/:key/basic', function(req,res,next) {
 	// validated, lets update
 	regatta.event_name=req.body.event_name;
 	regatta.event_date=req.body.event_date;
-	regatta.event_host=req.body.event_host;
-	regatta.boat_class=req.body.boat_class.split(',');
+	regatta.host_id=req.body.host_id;
 	regatta.event_description=req.body.event_description;
-	regatta.registration_site=req.body.registration_site;
+	regatta.registration_link=req.body.registration_link;
 	regatta.save();
 	res.redirect('/manage/'+req.params.id+'/'+req.params.key);
     });
@@ -68,7 +78,27 @@ router.post('/:id/:key/location', function(req,res,next) {
 	res.redirect('/manage/'+req.params.id+'/'+req.params.key);
     });
 });
+router.post('/:id/:key/class_list', function(req,res,next) {
+    Regatta.findOne({_id:req.params.id}, function(err,regatta){
+	if (err)
+	    res.redirect('/post/error');
+	if (!bcrypt.compareSync(req.params.key, regatta.passkey))
+	    res.redirect('/post/error');
 
+	var class_list = [];
+	    for (key in req.body) {
+		if (key.substr(0,6)=="class-") {
+		    class_list.push(key.slice(6));
+		} else {
+		    regatta[key]=req.body[key];
+		}
+	    }
+	regatta.class_list = class_list;
+	regatta.save()
+	res.redirect('/manage/'+req.params.id+'/'+req.params.key);
+
+    });
+});
 router.post('/:id/:key/schedule', function(req,res,next) {
     res.send('todo update schedule info')
 });

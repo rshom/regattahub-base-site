@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= regatta.event_name %>: RegattaHub</title>
+    <% include ./partials/head.ejs %>
+  </head>
+  <body>
+    <div class="container">
+      <% include ./partials/header.ejs %>
+      <div class="row">
+	<div class="col-md-2">
+	  <p><a class="btn btn-primary" href="/">Back to home</a></p>
+	  <p>If you need help just email <a href="mailto:support@regattahub.com">support@regattahub.com</a></p>
+	</div>
+	<div class="col-md-8" ng-app="manageApp">
+
+	  <div class="row">
+	      <p class="lead alert alert-warning" ng-hide="true">You must have javascript enabled</p>
+	    <p class="alert alert-danger lead text-center">This is your event's management page. The address is also a password.<br /> <strong>Only share this link with people who you want to edit your event.</strong></p>
+	    <div ng-hide="<%=regatta.published%>" class="alert alert-warning text-center">
+	      <p>Your regatta's page is not yet published. Click the button below to allow sailors to find your event.</p>
+	      <p>Unpublished pages will be removed after 45 days</p>
+	      <form action="/manage/<%=regatta._id%>/<%=key%>/publish" method="post">
+		<div class="form-group">
+		  <input type="submit" value="publish" class="btn btn-primary" />
+		</div>
+
+	      </form>
+	    </div>
+	    <p ng-show="<%=regatta.published%>" class="alert alert-success text-center">Your regatta's page is published at <a href="http://127.0.0.1:3000/results/<%= regatta._id %>">http://127.0.0.1:3000/results/<%= regatta._id %></a></p>
+
+	    <h1><%= regatta.event_name %></h1>
+	    <div class="well">
+	      <a name="basic"></a>
+	      <!-- this will go into a view -->
+		<h2>Basic Information</h2>
+		<form action="/manage/<%=regatta._id%>/<%=key%>/basic" method="post">
+		<div class="row">
+		<div class="form-group col-md-6">
+		  <label for="event_name">Event Name</label>
+		  <input type="text" name="event_name" value="<%=regatta.event_name%>" class="form-control" placeholder="Event Name" />
+		</div>
+		<div class="form-group col-md-6">
+		  <label for="event_name">Start Date</label>
+		  <input type="text" name="event_date" value="<%=regatta.event_date.toLocaleDateString() %>" class="form-control" placeholder="MM/DD/YYYY" />
+		  <span class="help-block">MM/DD/YYYY</span>
+		</div>
+		</div>
+		<div class="form-group">
+		  <label for="event_host">Event Host</label>
+		  <input type="text" name="host_id" value="<%=regatta.host_id%>" class="form-control" placeholder="Host ID" />
+		  <p class="help-block">Every organization registered in US Sailing has a unique ID. Look yours up <a href="">here</a>.
+		</div>
+
+		<div class="form-group">
+		  <label for="event_description">Event Description</label>
+		  <textarea name="event_description" class="form-control" rows=5 placeholder="Describe your event..."><%= regatta.event_description ? regatta.event_description:'' %></textarea>
+		</div>
+
+		<div class="form-group">
+		  <label for="registration_site">Registration Page</label>
+		  <input type="text" name="registration_link" value="<%=regatta.registration_link%>" class="form-control" placeholder="http://hostwebsite.com/regatta/registration" />
+		  <span class="help-block">RegattaHub can manage registration for you. <a href="mailto:russ@regattahub.com">Learn more.</a></span>
+		</div>
+		<div class="row">
+		  <div class="form-group col-md-12">
+		    <input type="submit" value="Update Information" class="btn btn-primary" />
+		  </div>
+		</div>
+	      </form>
+	    </div>
+	    <!-- course location -->
+	    <div class="well">
+	      <a name="location"></a>
+	      <h2>Location</h2>
+	      <% if (!regatta.location){regatta.location = {};} %>
+		<div class="row">
+		  <form action="/manage/<%=regatta._id%>/<%=key%>/location" method="post">
+
+		  <div class="form-group col-md-12">
+		    <label>Host Address</label>
+		    <input type="text" name="address_street" value="<%=regatta.address[0]%>" placeholder="Street Address" class="form-control" />
+		  </div>
+		  <div class="form-group col-md-6">
+		    <label>City</label>
+		    <input type="text" name="address_city" value="<%=regatta.address[1]%>" placeholder="City" class="form-control" />
+		  </div>
+		  <div class="form-group col-md-3">
+		    <label>State</label>
+		    <input type="text" name="address_state" value="<%=regatta.address[2]%>" placeholder="State" class="form-control" />
+		  </div>
+		  <div class="form-group col-md-3">
+		    <label>Zip Code</label>
+		    <input type="text" name="address_country" value="<%=regatta.address[3]%>" placeholder="02840" class="form-control" />
+		  </div>
+		</div>
+		<!-- end course location -->
+		<div class="row">
+		  <div class="form-group col-md-12">
+		    <input type="submit" value="Update Information" class="btn btn-primary" />
+		  </div>
+		</div>
+		</form>
+	    </div>
+	    <div class="well">
+	      <a name="classes"></a>
+	      <h2>Competing Classes</h2>
+	      <form action="/manage/<%=regatta._id%>/<%=key%>/class_list" method="post">
+		<div class="form-group">
+		  <div class="checkbox">
+
+
+<label class="col-md-3"><input type="checkbox" name="class-Multi-Class" <%- regatta.class_list.indexOf("Multi-Class")==-1 ? '' : 'checked' %>><strong>Multi-Class</strong></label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Other")==-1 ? '' : 'checked' %>type="checkbox" name="class-Other"><strong>Other</strong></label>
+<br />
+<br />
+<label class="col-md-3"><input <%-regatta.class_list.indexOf("A-Class")==-1 ? '' : 'checked' %> type="checkbox" name="class-A-Class">A-Class</label>
+<label class="col-md-3"><input type="checkbox" name="class-Albacore">Albacore</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Arrow")==-1 ? '' : 'checked' %> type="checkbox" name="class-Arrow">Arrow</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("A Scow")==-1 ? '' : 'checked' %> type="checkbox" name="class-A Scow">A Scow</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Atlantic")==-1 ? '' : 'checked' %> type="checkbox" name="class-Atlantic">Atlantic</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Beetle Cat")==-1 ? '' : 'checked' %> type="checkbox" name="class-Beetle Cat">Beetle Cat</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Blue Jay")==-1 ? '' : 'checked' %> type="checkbox" name="class-Blue Jay">Blue Jay</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Bongo")==-1 ? '' : 'checked' %> type="checkbox" name="class-Bongo">Bongo</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Buccaneer")==-1 ? '' : 'checked' %> type="checkbox" name="class-Buccaneer">Buccaneer</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Bullseye")==-1 ? '' : 'checked' %> type="checkbox" name="class-Bullseye">Bullseye</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Cal 20")==-1 ? '' : 'checked' %> type="checkbox" name="class-Cal 20">Cal 20</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Capri 14.2")==-1 ? '' : 'checked' %> type="checkbox" name="class-Capri 14.2">Capri 14.2</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Capri 22")==-1 ? '' : 'checked' %> type="checkbox" name="class-Capri 22">Capri 22</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Capri 25")==-1 ? '' : 'checked' %> type="checkbox" name="class-Capri 25">Capri 25</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Catalina 22")==-1 ? '' : 'checked' %> type="checkbox" name="class-Catalina 22">Catalina 22</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("CC Knockabout")==-1 ? '' : 'checked' %> type="checkbox" name="class-CC Knockabout">CC Knockabout</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("CC Mercury")==-1 ? '' : 'checked' %> type="checkbox" name="class-CC Mercury">CC Mercury</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Chesapeake 20")==-1 ? '' : 'checked' %> type="checkbox" name="class-Chesapeake 20">Chesapeake 20</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("CFJ")==-1 ? '' : 'checked' %> type="checkbox" name="class-CFJ">CFJ</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Club 420")==-1 ? '' : 'checked' %> type="checkbox" name="class-Club 420">Club 420</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Colgate 26")==-1 ? '' : 'checked' %> type="checkbox" name="class-Colgate 26">Colgate 26</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Coronado 15")==-1 ? '' : 'checked' %> type="checkbox" name="class-Coronado 15">Coronado 15</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("C Scow")==-1 ? '' : 'checked' %> type="checkbox" name="class-C Scow">C Scow</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Day Sailer")==-1 ? '' : 'checked' %> type="checkbox" name="class-Day Sailer">Day Sailer</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("DN Iceboat")==-1 ? '' : 'checked' %> type="checkbox" name="class-DN Iceboat">DN Iceboat</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Dragon")==-1 ? '' : 'checked' %> type="checkbox" name="class-Dragon">Dragon</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Elliot 6m")==-1 ? '' : 'checked' %> type="checkbox" name="class-Elliot 6m">Elliot 6m</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Ensign")==-1 ? '' : 'checked' %> type="checkbox" name="class-Ensign">Ensign</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("E Scow")==-1 ? '' : 'checked' %> type="checkbox" name="class-E Scow">E Scow</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Etchells")==-1 ? '' : 'checked' %> type="checkbox" name="class-Etchells">Etchells</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Europe")==-1 ? '' : 'checked' %> type="checkbox" name="class-Europe">Europe</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("F-18")==-1 ? '' : 'checked' %> type="checkbox" name="class-F-18">F-18</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Finn")==-1 ? '' : 'checked' %> type="checkbox" name="class-Finn">Finn</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Fireball")==-1 ? '' : 'checked' %> type="checkbox" name="class-Fireball">Fireball</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("505")==-1 ? '' : 'checked' %> type="checkbox" name="class-505">505</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("5.5 Metre")==-1 ? '' : 'checked' %> type="checkbox" name="class-5.5 Metre">5.5 Metre</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("420")==-1 ? '' : 'checked' %> type="checkbox" name="class-420">420</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("470")==-1 ? '' : 'checked' %> type="checkbox" name="class-470">470</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Flying Dutchman")==-1 ? '' : 'checked' %> type="checkbox" name="class-Flying Dutchman">Flying Dutchman</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Flying Scot")==-1 ? '' : 'checked' %> type="checkbox" name="class-Flying Scot">Flying Scot</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Flying Tern")==-1 ? '' : 'checked' %> type="checkbox" name="class-Flying Tern">Flying Tern</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Flying Tiger")==-1 ? '' : 'checked' %> type="checkbox" name="class-Flying Tiger">Flying Tiger</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Front Runner")==-1 ? '' : 'checked' %> type="checkbox" name="class-Front Runner">Front Runner</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Hampton OD")==-1 ? '' : 'checked' %> type="checkbox" name="class-Hampton OD">Hampton OD</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Harbor 20")==-1 ? '' : 'checked' %> type="checkbox" name="class-Harbor 20">Harbor 20</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Harpoon 4.6")==-1 ? '' : 'checked' %> type="checkbox" name="class-Harpoon 4.6">Harpoon 4.6</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Harpoon 5.2")==-1 ? '' : 'checked' %> type="checkbox" name="class-Harpoon 5.2">Harpoon 5.2</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Herreshoff 12.5")==-1 ? '' : 'checked' %> type="checkbox" name="class-Herreshoff 12.5">Herreshoff 12.5</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Holder 20")==-1 ? '' : 'checked' %> type="checkbox" name="class-Highlander">Highlander</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("I-20 (Inland 20 Scow)")==-1 ? '' : 'checked' %> type="checkbox" name="class-Holder 20">Holder 20</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("I-20 (Inland 20 Scow)")==-1 ? '' : 'checked' %> type="checkbox" name="class-I-20 (Inland 20 Scow)">I-20 (Inland 20 Scow)</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("IC24")==-1 ? '' : 'checked' %> type="checkbox" name="class-IC24">IC24</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Ideal 18")==-1 ? '' : 'checked' %> type="checkbox" name="class-Ideal 18">Ideal 18</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Interclub")==-1 ? '' : 'checked' %> type="checkbox" name="class-Interclub">Interclub</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Interlake")==-1 ? '' : 'checked' %> type="checkbox" name="class-Interlake">Interlake</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Int'l 14")==-1 ? '' : 'checked' %> type="checkbox" name="class-Int'l 14">Int'l 14</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Int'l 110")==-1 ? '' : 'checked' %> type="checkbox" name="class-Int'l 110">Int'l 110</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Int'l 210")==-1 ? '' : 'checked' %> type="checkbox" name="class-Int'l 210">Int'l 210</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Int'l Canoe")==-1 ? '' : 'checked' %> type="checkbox" name="class-Int'l Canoe">Int'l Canoe</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Int'l FJ")==-1 ? '' : 'checked' %> type="checkbox" name="class-Int'l FJ">Int'l FJ</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Int'l OD")==-1 ? '' : 'checked' %> type="checkbox" name="class-Int'l OD">Int'l OD</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("J-22")==-1 ? '' : 'checked' %> type="checkbox" name="class-J-22">J-22</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("J-24")==-1 ? '' : 'checked' %> type="checkbox" name="class-J-24">J-24</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("J-70")==-1 ? '' : 'checked' %> type="checkbox" name="class-J-70">J-70</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("J-80")==-1 ? '' : 'checked' %> type="checkbox" name="class-J-80">J-80</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("J-105")==-1 ? '' : 'checked' %> type="checkbox" name="class-J-105">J-105</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Jet 14")==-1 ? '' : 'checked' %> type="checkbox" name="class-Jet 14">Jet 14</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Johnson 18")==-1 ? '' : 'checked' %> type="checkbox" name="class-Johnson 18">Johnson 18</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("JY 15")==-1 ? '' : 'checked' %> type="checkbox" name="class-JY 15">JY 15</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Knarr")==-1 ? '' : 'checked' %> type="checkbox" name="class-Knarr">Knarr</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Laser")==-1 ? '' : 'checked' %> type="checkbox" name="class-Laser">Laser</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Lehman 12")==-1 ? '' : 'checked' %> type="checkbox" name="class-Lehman 12">Lehman 12</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Lido 14")==-1 ? '' : 'checked' %> type="checkbox" name="class-Lido 14">Lido 14</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Lightning")==-1 ? '' : 'checked' %> type="checkbox" name="class-Lightning">Lightning</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Luders 16")==-1 ? '' : 'checked' %> type="checkbox" name="class-Luders 16">Luders 16</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("M16 Scow")==-1 ? '' : 'checked' %> type="checkbox" name="class-M16 Scow">M16 Scow</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("M20 Scow")==-1 ? '' : 'checked' %> type="checkbox" name="class-M20 Scow">M20 Scow</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Martin 242")==-1 ? '' : 'checked' %> type="checkbox" name="class-Martin 242">Martin 242</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("MC Scow")==-1 ? '' : 'checked' %> type="checkbox" name="class-MC Scow">MC Scow</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Melges 17")==-1 ? '' : 'checked' %> type="checkbox" name="class-Melges 17">Melges 17</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Melges 20")==-1 ? '' : 'checked' %> type="checkbox" name="class-Melges 20">Melges 20</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Melges 24")==-1 ? '' : 'checked' %> type="checkbox" name="class-Melges 24">Melges 24</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Melges 32")==-1 ? '' : 'checked' %> type="checkbox" name="class-Melges 32">Melges 32</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Mercury (CA)")==-1 ? '' : 'checked' %> type="checkbox" name="class-Mercury (CA)">Mercury (CA)</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Mercury (CC)")==-1 ? '' : 'checked' %> type="checkbox" name="class-Mercury (CC)">Mercury (CC)</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Mobjack")==-1 ? '' : 'checked' %> type="checkbox" name="class-Mobjack">Mobjack</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Moore 24")==-1 ? '' : 'checked' %> type="checkbox" name="class-Moore 24">Moore 24</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Moth Int'l")==-1 ? '' : 'checked' %> type="checkbox" name="class-Moth Int'l">Moth Int'l</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Mutineer")==-1 ? '' : 'checked' %> type="checkbox" name="class-Mutineer">Mutineer</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Narrasketuck")==-1 ? '' : 'checked' %> type="checkbox" name="class-Narrasketuck">Narrasketuck</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("National OD")==-1 ? '' : 'checked' %> type="checkbox" name="class-National OD">National OD</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Nomad")==-1 ? '' : 'checked' %> type="checkbox" name="class-Nomad">Nomad</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("One Design 14")==-1 ? '' : 'checked' %> type="checkbox" name="class-One Design 14">One Design 14</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Optimist")==-1 ? '' : 'checked' %> type="checkbox" name="class-Optimist">Optimist</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("PC")==-1 ? '' : 'checked' %> type="checkbox" name="class-PC">PC</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Penguin")==-1 ? '' : 'checked' %> type="checkbox" name="class-Penguin">Penguin</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Rebel")==-1 ? '' : 'checked' %> type="checkbox" name="class-Rebel">Rebel</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Rhodes 18")==-1 ? '' : 'checked' %> type="checkbox" name="class-Rhodes 18">Rhodes 18</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Rhodes 19")==-1 ? '' : 'checked' %> type="checkbox" name="class-Rhodes 19">Rhodes 19</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Sabot")==-1 ? '' : 'checked' %> type="checkbox" name="class-Sabot">Sabot</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Santana 20")==-1 ? '' : 'checked' %> type="checkbox" name="class-Santana 20">Santana 20</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Schock 35")==-1 ? '' : 'checked' %> type="checkbox" name="class-Schock 35">Schock 35</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Sea Dog")==-1 ? '' : 'checked' %> type="checkbox" name="class-Sea Dog">Sea Dog</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Shark")==-1 ? '' : 'checked' %> type="checkbox" name="class-Shark">Shark</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Shields")==-1 ? '' : 'checked' %> type="checkbox" name="class-Shields">Shields</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Snipe")==-1 ? '' : 'checked' %> type="checkbox" name="class-Snipe">Snipe</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Soling")==-1 ? '' : 'checked' %> type="checkbox" name="class-Soling">Soling</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Sonar")==-1 ? '' : 'checked' %> type="checkbox" name="class-Sonar">Sonar</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Star")==-1 ? '' : 'checked' %> type="checkbox" name="class-Star">Star</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Sunfish")==-1 ? '' : 'checked' %> type="checkbox" name="class-Sunfish">Sunfish</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Sweet 16")==-1 ? '' : 'checked' %> type="checkbox" name="class-Sweet 16">Sweet 16</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("T-10")==-1 ? '' : 'checked' %> type="checkbox" name="class-T-10">T-10</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Thistle")==-1 ? '' : 'checked' %> type="checkbox" name="class-Thistle">Thistle</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Tornado Sport")==-1 ? '' : 'checked' %> type="checkbox" name="class-Tornado Sport">Tornado Sport</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Turnabout")==-1 ? '' : 'checked' %> type="checkbox" name="class-Turnabout">Turnabout</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("2.4m R")==-1 ? '' : 'checked' %> type="checkbox" name="class-2.4m R">2.4m R</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Ultimate 20")==-1 ? '' : 'checked' %> type="checkbox" name="class-Ultimate 20">Ultimate 20</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Viper 640")==-1 ? '' : 'checked' %> type="checkbox" name="class-Viper 640">Viper 640</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("VX One")==-1 ? '' : 'checked' %> type="checkbox" name="class-VX One">VX One</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Wayfarer")==-1 ? '' : 'checked' %> type="checkbox" name="class-Wayfarer">Wayfarer</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Windmill")==-1 ? '' : 'checked' %> type="checkbox" name="class-Windmill">Windmill</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("X Boat")==-1 ? '' : 'checked' %> type="checkbox" name="class-X Boat">X Boat</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Y Flyer")==-1 ? '' : 'checked' %> type="checkbox" name="class-Y Flyer">Y Flyer</label>
+<label class="col-md-3"><input <%- regatta.class_list.indexOf("Yngling")==-1 ? '' : 'checked' %> type="checkbox" name="class-Yngling">Yngling</label>
+<p class="help-block"><a class="">Not listed?</a></p>
+		  </div>
+		</div>
+<div class="form-group">
+  <p><input type="submit" class="btn btn-primary" value="Update Classes" /></p>
+</div>
+	      </form>
+	      </div>
+
+	    </div>
+
+	      <!-- end basic -->
+	    </div>
+	    <!-- schedule
+	    <div class="well">
+	      <a name="schedule"></a>
+	      <h2>Schedule</h2>
+	      <table class="table table-compact">
+		<thead>
+		  <tr>
+		    <th>Time</th>
+		    <th>Location</th>
+		    <th>Event</th>
+		    <th>Notes</th>
+		  </tr>
+		</thead>
+	      </table>
+	      <form>
+		<p>TODO form to add stuff to this</p>
+		<p>TODO buttons next to items to delete them</p>
+		<input type="submit" value="Update Schedule" class="btn btn-primary" />
+	      </form>
+	    </div>
+
+	    <div class="well">
+	      <a name="sailing_rules"></a>
+	      <h2>Sailing Rules</h2>
+	      <form action="/manage/<%=regatta._id%>/<%=key%>/sailing_rules" method="post">
+
+
+		<input type="submit" value="Update Sailing Rules" class="btn btn-primary" />
+	      </form>
+	    </div>
+
+	    <div class="well">
+	      <a name="results"></a>
+	      <h2>Results</h2>
+	      <form action="/manage/<%=regatta._id%>/<%=key%>/results" method="post">
+
+		<input type="submit" value="Update Results" class="btn btn-primary" />
+	      </form>
+
+	    </div>
+
+	    <div class="well">
+	      <a name="pictures"></a>
+	      <h2>Pictures</h2>
+	      <form action="/manage/<%=regatta._id%>/<%=key%>/pictures" method="post">
+
+		<input type="submit" value="Update Pictures" class="btn btn-primary" />
+	      </form>
+
+	    </div>
+
+	    <div class="well">
+	      <a name="social_media"></a>
+	      <h2>Social Media</h2>
+	      <form action="/manage/<%=regatta._id%>/<%=key%>/social_media" method="post">
+		<input type="submit" value="Update Social Media" class="btn btn-primary" />
+	      </form>
+
+	    </div>
+
+	</div>
+	  <!-- 
+	</div>
+	<div class="col-md-2">
+	  <div class="affix">
+      	    <ul class="nav">
+	      <li><a class="" href="#">Back to Top</a></li>
+	      <li><a class="" href="#basic">Basic Information</a></li>
+	      <li><a class="" href="#location">Location</a></li>
+	      <li><a class="" href="#schedule">Schedule</a></li>
+	      <li><a class="" href="#sailing_rules">Sailing Rules</a></li>
+	      <li><a class="" href="#results">Results</a></li>
+	      <li><a class="" href="#pictures">Pictures</a></li>
+	      <li><a class="" href="#social_media">Social Media</a></li>
+	    </ul>
+	  </div>
+      </div>
+	<!-- -->
+
+      </div>
+
+<% include ./partials/foot.ejs %>
+<script>
+  var regatta=<%- JSON.stringify(regatta) %>;
+</script>
+<script src="/javascripts/manageApp/module.js"></script>
+  </body>
+</html>

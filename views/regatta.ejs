@@ -16,99 +16,99 @@
     <div class="container">
       <% include ./partials/header.ejs %>
       <div class="row">
+	<!-- lef sidebar
 	<div class="col-md-2">
 	  <ul class="nav nav-pills nav-stacked">
-	    <h3>Find similar</h3>
-	    <li><a class="" href="/post/">Class</a></li>
 	  </ul>
 	</div>
+	<!-- end left sidebar -->
 	<div class="col-md-8">
-	  <div class="">
-	    <a name="basic"></a>
+	  <a name="basic"></a>
 	    
-	    <h1><%= regatta.event_name %></h1>
-	    <!-- Your share button code -->
-	    <div class="fb-share-button" data-href="http://127.0.0.1:3000/results/<%=regatta._id%>" data-layout="button" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fregattahub.com%2F<%=regatta._id%>;src=sdkpreparse">Share</a></div>
+	  <h1><%= regatta.event_name %></h1>
+	  <h3><%= regatta.event_date.toDateString() %></h3>
+	  <!-- Your share button code -->
+	  <div class="fb-share-button" data-href="http://127.0.0.1:3000/results/<%=regatta._id%>" data-layout="button" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fregattahub.com%2F<%=regatta._id%>;src=sdkpreparse">Share</a></div>
 	  
-	    <h3><%= regatta.event_date.toLocaleDateString() %></h3>
-	    <p>Register: <a href="<%= regatta.registration_site %>"><%= regatta.registration_site %></a></p>
-	      <p><%= regatta.event_description %></p>
-
-	  </div>
-
-	  <div class="">
-	    <a name="location"></a>
-	    <h2>Location</h2>
-
-	    <p><strong><%= regatta.event_host %></strong></p>
-	      <p><%= regatta.event_location.street %></p>
-	      <p><%= regatta.event_location.city %>, <%= regatta.event_location.state %>, <%= regatta.event_location.country %></p>
-	      <p><a href="http://maps.google.com/?q=<%= regatta.event_host %>+<%= regatta.event_location.street %>+<%= regatta.event_location.city %>+<%= regatta.event_location.state %>+<%= regatta.event_location.country %>" class="btn btn-success" target="_blank">Get directions</a></p>
-	  </div>
-	  <!-- Schedule 
-	  <div class="">
-	    <a name="schedule"></a>
-	    <h2>Schedule</h2>
-	    <p>Just list out of the schedule of events</p>
-	    <p>Still need to figure out how to deal with multi-day events</p>
-	  </div>
-	  <!-- end schedule -->
-
-	  <!-- sailing rules
-	  <div class="">
-	    <a name="sailing_rules"></a>
-	    <h2>Sailing Rules</h2>
-	    <p>None declared yet</p>
-	  </div>
-	  <!-- end sailing rules -->
-
-
-	  <!-- Results 
-	  <div class="">
-	    <a name="results"></a>
-	    <h2>Results</h2>
-	    <p>Maybe like a table, but you can click on the sail numbers to get more information about them.</p>
-	  </div>
-	  <!-- end results -->
-
-	  <!-- pictures
-	  <div class="">
-	    <a name="pictures"></a>
-	    <h2>Pictures</h2>
-	    <p>None uploaded yet</p>
-	  </div>
-	  <!-- end pictures -->
-
+	  <p><strong>Classes: </strong><%= regatta.class_list.join(', ') %></p>
+	  <p>Register: <a href="<%= regatta.registration_link %>"><%= regatta.registration_link %></a></p>
+	  <p><%= regatta.event_description %></p>
 	  
 	</div>
-	<div class="col-md-2">
-	  <div class="affix">
-	    <!-- internal nav not needed until finished
-      	    <ul class="nav">
-	      <li><a class="btn" href="#">Back to Top</a></li>
-	      <li><a class="btn" href="#basic">Basic Information</a></li>
-	      <li><a class="btn" href="#location">Location</a></li>
-	      <li><a class="btn" href="#schedule">Schedule</a></li>
-	      <li><a class="btn" href="#sailing_rules">Sailing Rules</a></li>
-	      <li><a class="btn" href="#results">Results</a></li>
-	      <li><a class="btn" href="#pictures">Pictures</a></li>
-	      <li><a class="btn" href="#social_media">Social Media</a></li>
-	    </ul>
-	    <!-- end internal nav -->
-	  </div>
+	
+	<div class="col-md-4">
+	  <a name="location"></a>
+	  <h2>Location</h2>
+	  
+	  <p><strong><%= regatta.event_host %></strong></p>
+	  <p><%= regatta.address[0] %></p>
+	  <p><%= regatta.address[1] %>, <%= regatta.address[2] %>, <%= regatta.address[3] %></p>
+	  <p><a href="http://maps.google.com/?q=<%= regatta.event_host %>+<%= regatta.address[0] %>+<%= regatta.address[1] %>+<%= regatta.address[2] %>+<%= regatta.address[3] %>" class="btn btn-success" target="_blank">Get directions</a></p>
 	</div>
-</div>
+	<!-- Schedule 
+	     <div class="">
+	       <a name="schedule"></a>
+	       <h2>Schedule</h2>
+	       <p>Just list out of the schedule of events</p>
+	       <p>Still need to figure out how to deal with multi-day events</p>
+	     </div>
+	     <!-- end schedule -->
+	     
+	     <!-- sailing rules
+		  <div class="">
+		    <a name="sailing_rules"></a>
+		    <h2>Sailing Rules</h2>
+		    <p>None declared yet</p>
+		  </div>
+		  <!-- end sailing rules -->
+		  
+		  
+		  <!-- Results 
+		       <div class="">
+			 <a name="results"></a>
+			 <h2>Results</h2>
+			 <p>Maybe like a table, but you can click on the sail numbers to get more information about them.</p>
+		       </div>
+		       <!-- end results -->
+		       
+		       <!-- pictures
+			    <div class="">
+			      <a name="pictures"></a>
+			      <h2>Pictures</h2>
+			      <p>None uploaded yet</p>
+			    </div>
+			    <!-- end pictures -->
 
-<% include ./partials/foot.ejs %>
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=1105009586262339";
-  fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));</script>
-		
-
+			    
+      </div>
+      <div class="col-md-2">
+	<div class="affix">
+	  <!-- internal nav not needed until finished
+      	       <ul class="nav">
+		 <li><a class="btn" href="#">Back to Top</a></li>
+		 <li><a class="btn" href="#basic">Basic Information</a></li>
+		 <li><a class="btn" href="#location">Location</a></li>
+		 <li><a class="btn" href="#schedule">Schedule</a></li>
+		 <li><a class="btn" href="#sailing_rules">Sailing Rules</a></li>
+		 <li><a class="btn" href="#results">Results</a></li>
+		 <li><a class="btn" href="#pictures">Pictures</a></li>
+		 <li><a class="btn" href="#social_media">Social Media</a></li>
+	       </ul>
+	       <!-- end internal nav -->
+	</div>
+      </div>
+    </div>
+    
+    <% include ./partials/foot.ejs %>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=1105009586262339";
+      fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+    
+    
   </body>
 </html>
